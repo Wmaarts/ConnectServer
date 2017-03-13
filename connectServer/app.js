@@ -4,6 +4,15 @@ var SwaggerExpress = require('swagger-express-mw');
 var app = require('express')();
 module.exports = app; // for testing
 
+//Data Access Layer
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/connect-server');
+mongoose.Promise = require('q').Promise;
+// /Data Access Layer
+
+// Models
+require('./api/models/service');
+
 var config = {
   appRoot: __dirname // required config
 };

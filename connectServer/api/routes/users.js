@@ -4,8 +4,7 @@ var router = express();
 var handleError;
 
 var mongoose = require('mongoose');
-Author = mongoose.model('Author');
-Book = mongoose.model('Book');
+User = mongoose.model('User');
 
 /*
 	TODO:
@@ -20,39 +19,44 @@ Book = mongoose.model('Book');
 		age is een property die opgehaald wordt
 		numberOfBooks is een property die opgehaald wordt
 */
-function getAuthors(req, res){
+function getUsers(req, res){
 	var query = {};
-	if(req.params.id){
-		query._id = req.params.id;
+	var result = User.find(query).then(data => {
+		return res.json(data);
+	})
+	.fail(err => handleError(req, res, 500, err));
+}
+
+function getUserById(req, res){
+	var query = {};
+	if(req.params.name){
+		console.log("Got name: " + req.params.name);
+		query.name = req.params.name;
 	} 
 
-	var result = Author.find(query);
+	var result = User.find(query);
 
-	result
-		.then(data => {
-//			if(err){  }
-
-			// We hebben gezocht op id, dus we gaan geen array teruggeven.
+	console.log(query);
+	result.then(data => {
+			// Don't return an array, return the element
 			if(req.params.id){
 				data = data[0];
 			}
 			return res.json(data);
 		})
-//		.fail(err => handleError(req, res, 500, err));
+		.fail(err => handleError(req, res, 500, err));
 }
 
-function addAuthor(req, res){
-	var author = new Author(req.body);
-	author
-		.save()
+function addUser(req, res){
+	var author = new User(req.body);
+	author.save()
 		.then(savedAuthor => {
 			if(err){ return handleError(req, res, 500, err); }
 			else {
 				res.status(201);
 				res.json(savedAuthor);
 			}
-		})
-		.fail(err => handleError(req, res, 500, err));
+		}).fail(err => handleError(req, res, 500, err));
 }
 
 /*
@@ -63,9 +67,9 @@ function addAuthor(req, res){
 	- Author met nieuw book teruggeven
 	- Mocht iets van dit mis gaan dan handleError(req, res, statusCode, err) aanroepen
 */
-function addBook(req, res){
-	res.json({});
-}
+//function addBook(req, res){
+//	res.json({});
+//}
 
 /*
 	TODO:
@@ -75,23 +79,23 @@ function addBook(req, res){
 	- Author zonder betreffende book teruggeven
 	- Mocht iets van dit mis gaan dan handleError(req, res, statusCode, err) aanroepen
 */
-function deleteBook(req, res){
-	res.json({});
-}
+//function deleteBook(req, res){
+//	res.json({});
+//}
 
 // Routing
 router.route('/')
-	.get(getAuthors)
-	.post(addAuthor);
+	.get(getUsers)
+	.post(getUsers);
 
-router.route('/:id')
-	.get(getAuthors);
+router.route('/:name')
+	.get(getUserById);
 
-router.route('/:id/books')
-	.post(addBook);
+//router.route('/:id/books')
+//	.post(addBook);
 
-router.route('/:id/books/:bookId')
-	.delete(deleteBook);
+//router.route('/:id/books/:bookId')
+//	.delete(deleteBook);
 
 // Export
 module.exports = function (errCallback){

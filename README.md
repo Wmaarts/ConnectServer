@@ -9,8 +9,9 @@ Mark-Jan:
 
 Wouter:
 - Models in mongoose implementeren
-- Gepagineerd ophalen
-- Websockets implementeren (de vraag is wanneer -> aanwezige mensen tijdens de dienst)
+- Websockets implementeren
+ => Websocket tussen controller en view. Dus live updaten in de view via socket.
+ => Lijst van personen die er zijn -> live updaten in de browser
 
 TODO:
 - Autorisatie & authenticatie

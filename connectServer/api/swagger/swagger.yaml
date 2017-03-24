@@ -18,6 +18,23 @@ consumes:
 produces:
   - application/json
 paths:
+  /user:
+    x-swagger-router-controller: userController
+    get:
+      description: Returns all the users to the caller
+      operationId: getUsers
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/GetUserListResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
   /hello:
     # binds a127 app logic to a route
     x-swagger-router-controller: hello_world
@@ -42,59 +59,32 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /testudesu:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: testudesu
-    get:
-      description: Returns 'Hello' to the caller
-      # used as the method name of the controller
-      operationId: hiya
-      parameters:
-        - name: name
-          in: query
-          description: The name of the person to whom to say hello
-          required: false
-          type: string
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-  /testo:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: testudesu
-    get:
-      description: Returns 'Hello' to the caller
-      # used as the method name of the controller
-      operationId: hiyas
-      parameters:
-        - name: name
-          in: query
-          description: The name of the person to whom to say hello
-          required: false
-          type: string
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
+  
     
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
+  GetUserListResponse:
+    required:
+      - users
+    properties:
+      # The array of users
+      users:
+        type: array
+        items: 
+          type: object
+          properties:
+            role:
+              type: string
+            name:
+              type: string
+            password:
+              type: string
+            telephonenumber:
+              type: number
+            photo:
+              type: string
   HelloWorldResponse:
     required:
       - message

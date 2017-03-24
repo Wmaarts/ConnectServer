@@ -18,10 +18,89 @@ consumes:
 produces:
   - application/json
 paths:
+  /photo:
+    x-swagger-router-controller: photoController
+    post:
+      description: Post a photo to the server
+      operationId: postPhoto
+      parameters:
+        - name: photoString
+          description: photo properties
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Photo"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/GeneralResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /photo/{id}:
+    x-swagger-router-controller: photoController
+    get:
+      description: Returns a specific photo to the caller
+      operationId: getPhoto
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/GetPhotoResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      description: Delete a photo
+      operationId: deletePhoto
+      parameters:
+        - name: id
+          description: photo id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Succes
+          schema:
+            $ref: "#/definitions/GeneralResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
   /user:
     x-swagger-router-controller: userController
+    post:
+      description: Post user to the server/database
+      operationId: addUser
+      parameters:
+        - name: user
+          description: user object
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: Succes
+          schema:
+            $ref: "#/definitions/GeneralResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
     get:
-      description: Returns all the users to the caller
+      description: Returns all the users to the caller. Because we can
       operationId: getUsers
       responses:
         "200":
@@ -34,6 +113,76 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+            
+  /user/{id}:
+    x-swagger-router-controller: userController
+    put:
+      description: Update user
+      operationId: updateUser
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+        - name: user
+          description: user properties
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/GeneralResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      description: Delete user
+      operationId: deleteUser
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/GeneralResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /user/{id}/photos:
+    x-swagger-router-controller: userController
+    get:
+      description: Get all photos associated with this user
+      operationId: getAllPhotosByUser
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/GetPhotoListResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      
   
   /hello:
     # binds a127 app logic to a route
@@ -65,6 +214,37 @@ paths:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
+  GetPhotoResponse:
+      required:
+        - id
+        - photoString
+        - firstUser
+        - secondUser
+      properties:
+        id:
+          type: string
+        photoString:
+          type: string
+        firstUser:
+          type: string
+        secondUser:
+          type: string
+  Photo:
+    type: object
+    properties:
+      photoString:
+        type: string
+      firstUser:
+        type: string
+        description: first user (the one who made the picture)
+      secondUser:
+        type: string
+        description: second user (photo partner)
+    required:
+      - photoString
+      - firstUser
+      - secondUser
+        
   GetUserListResponse:
     required:
       - users
@@ -85,12 +265,49 @@ definitions:
               type: number
             photo:
               type: string
+  
+  GetPhotoListResponse:
+    required:
+      - photos
+    properties:
+      photos:
+        type: array
+        items:
+          $ref: "#/definitions/Photo"
+              
+  User:
+    type: object
+    properties:
+      role:
+        type: string
+      name:
+        type: string
+      telephoneNumber:
+        type: number
+      photo:
+        $ref: "#/definitions/Photo"
+    required:
+      - role
+      - name
+              
   HelloWorldResponse:
     required:
       - message
     properties:
       message:
         type: string
+  GeneralResponse:
+    type: object
+    properties:
+      success:
+        type: number
+        description: returns 1 if successful
+      description:
+        type: string
+        description: a short comment 
+    required:
+      - success
+      - description
   ErrorResponse:
     required:
       - message

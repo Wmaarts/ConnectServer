@@ -24,7 +24,7 @@ paths:
       description: Post a photo to the server
       operationId: postPhoto
       parameters:
-        - name: photoString
+        - name: photo
           description: photo properties
           in: body
           required: true
@@ -78,6 +78,72 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
   
+  /photo/user/{id}:
+    x-swagger-router-controller: photoController
+    get:
+      description: Get all photos associated with this user
+      operationId: getAllPhotosByUser
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/GetPhotoListResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      
+  /photo/user/{id}/secondUser/{id}:
+    x-swagger-router-controller: photoController
+    get:
+      description: Get all photos associated with both users
+      operationId: getAllPhotosByTwoUsers
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/GetPhotoListResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
+  /photo/service/{id}:
+    x-swagger-router-controller: photoController
+    get:
+      description: Get all photos by service id
+      operationId: getAllPhotosByServiceId
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/GetPhotoListResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
   /user:
     x-swagger-router-controller: userController
     post:
@@ -100,7 +166,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
     get:
-      description: Returns all the users to the caller. Because we can
+      description: Returns all the users to the caller
       operationId: getUsers
       responses:
         "200":
@@ -116,6 +182,24 @@ paths:
             
   /user/{id}:
     x-swagger-router-controller: userController
+    get:
+      description: Get specific user by id
+      operationId: getUser
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/GetUserResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    
     put:
       description: Update user
       operationId: updateUser
@@ -160,12 +244,12 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-            
-  /user/{id}/photos:
+  
+  /user/service/{id}:
     x-swagger-router-controller: userController
     get:
-      description: Get all photos associated with this user
-      operationId: getAllPhotosByUser
+      description: Get all users by service id
+      operationId: getAllUsersByService
       parameters:
         - name: id
           type: string
@@ -176,105 +260,123 @@ paths:
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/GetPhotoListResponse"
+            $ref: "#/definitions/GetUserListResponse"
         # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+       
+  /service:
+    x-swagger-router-controller: serviceController
+    post:
+      description: Post service to the server/database
+      operationId: addService
+      parameters:
+        - name: service
+          description: service object
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Service"
+      responses:
+        "200":
+          description: Succes
+          schema:
+            $ref: "#/definitions/GeneralResponse"
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
       
-  
-  /hello:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: hello_world
+            
+  /service/{id}:
+    x-swagger-router-controller: serviceController
     get:
-      description: Returns 'Hello' to the caller
-      # used as the method name of the controller
-      operationId: hello
+      description: Get service
+      operationId: getService
       parameters:
-        - name: name
-          in: query
-          description: The name of the person to whom to say hello
-          required: false
+        - name: id
           type: string
+          in: path
+          required: true
       responses:
         "200":
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
+            $ref: "#/definitions/GetServiceResponse"
         # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  
+          
+    put:
+      description: Update service
+      operationId: updateService
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+        - name: service
+          description: service properties
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Service"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/GeneralResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      description: Delete service
+      operationId: deleteService
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/GeneralResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
     
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
-  GetPhotoResponse:
-      required:
-        - id
-        - photoString
-        - firstUser
-        - secondUser
-      properties:
-        id:
-          type: string
-        photoString:
-          type: string
-        firstUser:
-          type: string
-        secondUser:
-          type: string
   Photo:
     type: object
     properties:
       photoString:
         type: string
-      firstUser:
+      firstUserId:
         type: string
         description: first user (the one who made the picture)
-      secondUser:
+      secondUserId:
         type: string
         description: second user (photo partner)
     required:
       - photoString
-      - firstUser
-      - secondUser
-        
-  GetUserListResponse:
-    required:
-      - users
-    properties:
-      # The array of users
-      users:
-        type: array
-        items: 
-          type: object
-          properties:
-            role:
-              type: string
-            name:
-              type: string
-            password:
-              type: string
-            telephonenumber:
-              type: number
-            photo:
-              type: string
+      - firstUserId
+      - secondUserId
   
-  GetPhotoListResponse:
-    required:
-      - photos
-    properties:
-      photos:
-        type: array
-        items:
-          $ref: "#/definitions/Photo"
-              
   User:
     type: object
     properties:
@@ -285,17 +387,82 @@ definitions:
       telephoneNumber:
         type: number
       photo:
-        $ref: "#/definitions/Photo"
-    required:
-      - role
-      - name
-              
-  HelloWorldResponse:
-    required:
-      - message
-    properties:
-      message:
         type: string
+    required:
+      - name
+  
+  Service:
+    type: object
+    properties:
+      name:
+        type: string
+      date:
+        type: string
+        format: date-time
+      description:
+        type: string
+      geolocation:
+        $ref: "#/definitions/Geolocation"
+      usersVisited:
+        type: array
+        items:
+          type: string
+      photos:
+        type: array
+        items:
+          type: string
+    required:
+      - name
+      - date
+      - description
+      - geolocation
+      
+  Geolocation:
+    type: object
+    properties:
+      latitude:
+        type: number
+        format: float
+      longitude:
+        type: number 
+        format: float
+  
+  GetPhotoResponse:
+    properties:
+      Photo:
+        $ref: "#/definitions/Photo"
+        
+  GetUserListResponse:
+    required:
+      - users
+    properties:
+      # The array of users
+      users:
+        type: array
+        items: 
+          $ref: "#/definitions/User"
+              
+  GetUserResponse:
+    properties:
+      user:
+        $ref: "#/definitions/User"
+        
+  GetServiceResponse:
+    properties:
+      service:
+        $ref: "#/definitions/Service"
+  
+  GetPhotoListResponse:
+    required:
+      - photos
+    properties:
+      photos:
+        type: array
+        items:
+          $ref: "#/definitions/Photo"
+              
+  
+        
   GeneralResponse:
     type: object
     properties:

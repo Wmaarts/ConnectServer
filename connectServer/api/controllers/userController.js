@@ -15,3 +15,4 @@ function getUsers(req, res) {
 	})
 	.fail(err => handleError(req, res, 500, err));
 }
+

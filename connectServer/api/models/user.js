@@ -1,31 +1,42 @@
 var mongoose = require('mongoose');
+var bcrypt   = require('bcrypt-nodejs');
 
 console.log('Initializing user schema');
 
+var roles = ['user', 'moderator', 'admin']
+
 var userSchema = new mongoose.Schema({
-	role: {type: String, required: true},
-	name: {type: String, required: true, unique: true},
-	password: {type: String, required: true},
-	telNr: {type: Number, required: true},
-	photo: { type: String}
+	telNr: {type: String},
+	role: {type: String, required: true, enum: roles, unique: false, default: "moderator"},
+	photo: {type: String},
+	name: {type: String},
+	local            : {
+		email        : {type: String},
+		password     : String,
+	},
+    facebook         : {
+        id           : String,
+        token        : String,
+        email        : String,
+        name         : String
+    },
+    google           : {
+        id           : String,
+        token        : String,
+        email        : String,
+        name         : String
+    }
 });
 
-console.log('Giving mongo the user model');
+//generating a hash
+userSchema.methods.generateHash = function(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+// checking if password is valid
+userSchema.methods.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.local.password);
+};
+
+console.log('Giving mongo the user model!');
 mongoose.model('User', userSchema);
-
-/*
-TODO: Validation
-- Firstname: Verplicht, String
-- Lastname: Verplicht, String
-- Birthdate: Verplicht, Date, voor vandaag
-- Country: String, default: NL
-- Ranking: Number, unique, boven 0
-- Books: Array van book id's
-*/
-
-/*
-TODO: 
-- De benodigde extra validation
-- De benodigde static methods
-- De benodigde instance methods
-*/

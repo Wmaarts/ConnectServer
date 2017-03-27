@@ -2,43 +2,41 @@ var q = require('q');
 
 var mongoose = require('mongoose');
 User = mongoose.model('User');
-//Author = mongoose.model('Author');
-
-/*
- * TODO:!!! Le OLDe copypasterino
- */
 
 
 function fillUsers(overwrite){
 	var testData = [
 		{
-			role: 'moderator', 
-			name: 'Wouter',
-			password: 'password',
-			telNr: '0345923091', 
-			photo: 'thisIsAPhoto'
-		},
-		{
-			role: 'moderator', 
-			name: 'Mark-Jan',
-			password: 'password',
-			telNr: '099220192', 
-			photo: 'thisIsYourPhoto'
+		    "_id" : '58d52617e1b7270dc4714358',
+		    "local" : {
+		        "password" : "$2a$08$gRWR3zlvyKUHHkNbM9wFf.uTuIorr/FBOFiHcatQ7V8fk6GseNXW6",
+		        "email" : "admin"
+		    },
+		    "role" : "moderator",
+		    "__v" : 0
 		}
 	];
 
 	User.find({})
 		.then(data => {
-			if(overwrite || data.length == 0){
-				console.log('Creating users testdata');
-				
-				testData.forEach(function(user){
-					new User(user).save();
+			if(overwrite || data.length <= 1){
+				console.log('Clearing users and creating new testdata');
+				User.remove({}, function(){
+					// First remove all previous users, then create the new ones
+					
+					testData.forEach(function(user){
+						var model = new User(user);
+						
+						// Error handling
+						model.save(function(err){
+							console.error(err);
+							model.save(err);
+						});
+					})
 				});
 			} else{
 				console.log('Skipping create users testdata, already present');
 			}
-
 			return;
 		});
 };

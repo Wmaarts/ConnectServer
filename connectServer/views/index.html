@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:10010');
+  socket.on('number', function(msg){
+      $('#messages').html('You have been waiting for ' + msg + ' second(s)!');
+  });
+</script>
+
+<head>
+    <title>Node Authentication</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <style>
+        body        { padding-top:80px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="jumbotron text-center">
+        <h1><span class="fa fa-lock"></span> Node Authentication</h1>
+
+        <p>Login or Register!</p>
+        <p id="messages">You have been waiting for 0 second(s)!</p>
+
+        <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
+        <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
+        <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+        <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google</a>
+    </div>
+    <ul id="messages"></ul>
+</div>
+</body>
+</html>

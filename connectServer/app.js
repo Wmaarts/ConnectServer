@@ -35,6 +35,8 @@ function handleError(req, res, statusCode, message){
 
 // Load the models
 require('./api/models/user');
+require('./api/models/photo');
+require('./api/models/service');
 require('./api/helpers/fillTestData')();
 
 // Routes

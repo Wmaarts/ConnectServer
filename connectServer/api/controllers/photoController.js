@@ -1,6 +1,11 @@
+'use strict';
+/*
+ 'use strict' is not required but helpful for turning syntactical errors into true errors in the program flow
+ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
+*/
+
 var handleError; //TODO error handling
 
-var util = require('util');
 var mongoose = require('mongoose');
 Photo = mongoose.model('Photo');
 

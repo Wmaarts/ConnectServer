@@ -26,12 +26,8 @@ function getUserById(req, res) {
 	//req.swagger contains the path parameters
 	query._id = req.swagger.params.id.value;
 
-	var userResult = User.find(query).then(data => {
-			// Don't return an array, return the element
-			if(req.swagger.params.id){
-				data = data[0];
-			}
-			return res.json(data);
+	var userResult = User.findById(query).then(data => {
+			res.json(data);
 	})
 	.fail(err => handleError(req, res, 500, err));
 }

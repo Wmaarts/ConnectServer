@@ -43,7 +43,7 @@ paths:
   /photo/{id}:
     x-swagger-router-controller: photoController
     get:
-      description: Returns a specific photo to the caller
+      description: Return photo by id
       operationId: getPhoto
       parameters:
         - name: id
@@ -60,7 +60,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
     delete:
-      description: Delete a photo
+      description: Delete photo by id
       operationId: deletePhoto
       parameters:
         - name: id
@@ -405,10 +405,12 @@ definitions:
         $ref: "#/definitions/Geolocation"
       usersVisited:
         type: array
+        description: users with the app that are at the event/service
         items:
           type: string
       photos:
         type: array
+        description: made photos at the event/service
         items:
           type: string
     required:
@@ -423,9 +425,11 @@ definitions:
       latitude:
         type: number
         format: float
+        description: x-horizontal coordinate on map
       longitude:
         type: number 
         format: float
+        description: y-vertical coordinate on map
   
   GetPhotoResponse:
     properties:

@@ -14,7 +14,13 @@ function fillUsers(overwrite){
 		    },
 		    "role" : "moderator",
 		    "__v" : 0
-		}
+		},
+		{ // just a normal user for testing purposes (Photos)
+		    "_id" : '58da5d2878f01000f84b93ec',
+			"name": "test",
+		    "role" : "user",
+		    "__v" : 0
+		},
 	];
 
 	User.find({})

@@ -100,13 +100,17 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
       
-  /photo/user/{id}/secondUser/{id}:
+  /photo/user/{firstUserId}/secondUser/{secondUserId}:
     x-swagger-router-controller: photoController
     get:
       description: Get all photos associated with both users
       operationId: getAllPhotosByTwoUsers
       parameters:
-        - name: id
+        - name: firstUserId
+          type: string
+          in: path
+          required: true
+        - name: secondUserId
           type: string
           in: path
           required: true
@@ -148,7 +152,7 @@ paths:
     x-swagger-router-controller: userController
     post:
       description: Post user to the server/database
-      operationId: addUser
+      operationId: postUser
       parameters:
         - name: user
           description: user object

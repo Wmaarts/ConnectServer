@@ -8,9 +8,21 @@ var mongoose = require('mongoose');
 User = mongoose.model('User');
 
 module.exports = {
+	postUser: addUser,
   	getUsers: getUserList,
 	getUser: getUserById,
 };
+
+
+function addUser(req, res) {
+	var user = new User(req.body);
+
+	user.save()
+		.then(savedPhoto => {
+			res.json({success: 1, description: "User added"});
+		})
+		.fail(err => handleError(req, res, 500, err));
+}
 
 function getUserList(req, res) {
 	var query = {};

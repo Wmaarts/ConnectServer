@@ -13,14 +13,15 @@ In strict mode, this will throw an error, making it impossible to accidentally c
 var Photo = mongoose.model('Photo'); //don't forget vars
 
 module.exports = {
-  postPhoto: createPhoto,
+  postPhoto: addPhoto,
   getPhoto: getPhoto,
   getAllPhotosByUser: getAllPhotosByUser,
+  getAllPhotosByTwoUsers: getAllPhotosByTwoUsers,
   deletePhoto: deletePhoto,
 };
 
 // CREATE (POST)
-function createPhoto(req, res) {
+function addPhoto(req, res) {
     var photo = new Photo(req.body);
 
 	photo.save()
@@ -34,7 +35,7 @@ function createPhoto(req, res) {
 		.fail(err => handleError(req, res, 500, err));
 }
 
-// READ (GET)
+// READ (GET) By Id
 function getPhoto(req, res) {
 	var query = {};
 
@@ -49,12 +50,14 @@ function getPhoto(req, res) {
 	.fail(err => handleError(req, res, 500, err));
 }
 
-// READ (GET)
+// READ (GET) By User
 function getAllPhotosByUser(req, res) {
 	var query = {};
 
-	//req.swagger contains the path parameters
-	query.firstUserId = req.swagger.params.id.value;
+	query = { "$or": [
+				{firstUserId : req.swagger.params.id.value},
+				{secondUserId : req.swagger.params.id.value}
+	]};
 
 	var photoResult = Photo.find(query);
 	
@@ -64,6 +67,28 @@ function getAllPhotosByUser(req, res) {
 	.fail(err => handleError(req, res, 500, err));
 }
 
+function getAllPhotosByTwoUsers(req, res) {
+	var query = {};
+
+	query = 
+	{ "$or": [
+		{ "$and": [
+			{firstUserId : req.swagger.params.firstUserId.value},
+			{secondUserId : req.swagger.params.secondUserId.value},
+		]},
+		{ "$and": [
+			{firstUserId : req.swagger.params.secondUserId.value},
+			{secondUserId : req.swagger.params.firstUserId.value},
+		]}
+	]};
+
+	var photoResult = Photo.find(query);
+	
+	photoResult.then(data => {
+		res.json(data);
+	})
+	.fail(err => handleError(req, res, 500, err));
+}
 
 
 // DELETE (DELETE)

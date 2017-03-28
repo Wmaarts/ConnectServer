@@ -15,6 +15,7 @@ var Photo = mongoose.model('Photo'); //don't forget vars
 module.exports = {
   postPhoto: createPhoto,
   getPhoto: getPhoto,
+  getAllPhotosByUser: getAllPhotosByUser,
   deletePhoto: deletePhoto,
 };
 
@@ -40,17 +41,30 @@ function getPhoto(req, res) {
 	//req.swagger contains the path parameters
 	query._id = req.swagger.params.id.value;
 
+	var photoResult = Photo.findById(query);
+	
+	photoResult.then(data => {
+		res.json(data);
+	})
+	.fail(err => handleError(req, res, 500, err));
+}
+
+// READ (GET)
+function getAllPhotosByUser(req, res) {
+	var query = {};
+
+	//req.swagger contains the path parameters
+	query.firstUserId = req.swagger.params.id.value;
+
 	var photoResult = Photo.find(query);
 	
 	photoResult.then(data => {
-			// Don't return an array, return the element
-			if(req.swagger.params.id){
-				data = data[0];
-			}
-			return res.json(data); // return?
-		})
-		.fail(err => handleError(req, res, 500, err));
+		res.json(data);
+	})
+	.fail(err => handleError(req, res, 500, err));
 }
+
+
 
 // DELETE (DELETE)
 function deletePhoto(req, res, next) {

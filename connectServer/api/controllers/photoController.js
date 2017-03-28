@@ -1,13 +1,16 @@
 'use strict';
 /*
  'use strict' is not required but helpful for turning syntactical errors into true errors in the program flow
- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
+ https://www.w3schools.com/js/js_strict.asp
 */
 
 var handleError; //TODO error handling
 
 var mongoose = require('mongoose');
-Photo = mongoose.model('Photo');
+
+/* As an example, in normal JavaScript, mistyping a variable name creates a new global variable. 
+In strict mode, this will throw an error, making it impossible to accidentally create a global variable.*/
+var Photo = mongoose.model('Photo'); //don't forget vars
 
 module.exports = {
   postPhoto: createPhoto,

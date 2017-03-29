@@ -14,10 +14,10 @@ var Photo = mongoose.model('Photo'); //don't forget vars
 
 module.exports = {
   postPhoto: addPhoto,
-  getPhoto: getPhoto,
+  getPhoto: getPhotoById,
   getAllPhotosByUser: getAllPhotosByUser,
   getAllPhotosByTwoUsers: getAllPhotosByTwoUsers,
-  deletePhoto: deletePhoto,
+  deletePhoto: deletePhotoById,
 };
 
 // CREATE (POST)
@@ -36,7 +36,7 @@ function addPhoto(req, res) {
 }
 
 // READ (GET) By Id
-function getPhoto(req, res) {
+function getPhotoById(req, res) {
 	var query = {};
 
 	//req.swagger contains the path parameters
@@ -92,7 +92,7 @@ function getAllPhotosByTwoUsers(req, res) {
 
 
 // DELETE (DELETE)
-function deletePhoto(req, res, next) {
+function deletePhotoById(req, res, next) {
 	var query = {};
 
 	query._id = req.swagger.params.id.value; //note _id -> query has to search on the correct name, no misspellings

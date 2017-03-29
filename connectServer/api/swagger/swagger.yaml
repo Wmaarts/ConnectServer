@@ -206,7 +206,7 @@ paths:
     
     put:
       description: Update user
-      operationId: updateUser
+      operationId: putUser
       parameters:
         - name: id
           type: string
@@ -275,7 +275,7 @@ paths:
     x-swagger-router-controller: serviceController
     post:
       description: Post service to the server/database
-      operationId: addService
+      operationId: postService
       parameters:
         - name: service
           description: service object

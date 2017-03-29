@@ -318,7 +318,7 @@ paths:
           
     put:
       description: Update service
-      operationId: updateService
+      operationId: putService
       parameters:
         - name: id
           type: string

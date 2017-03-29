@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-console.log('Initializing service schema');
+console.log('Initializing photo schema');
 
 var photoSchema = new mongoose.Schema({
 	firstUserId: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},

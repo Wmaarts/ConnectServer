@@ -47,7 +47,6 @@ module.exports = function(passport) {
         User.findOne({ 'local.email' :  email }, function(err, user) {
             // if there are any errors, return the error
             if (err){
-            	console.log("oH!!!");
                 return done(err);
             }
 
@@ -140,9 +139,6 @@ module.exports = function(passport) {
 	                } else {
 	                    // if there is no user found with that facebook id, create them
 	                    var newUser            = new User();
-	                    console.log("We got a! ");
-	                    console.log(profile);
-	
 	                    // set all of the facebook information in our user model
 	                    newUser.facebook.id    = profile.id; // set the users facebook id                   
 	                    newUser.facebook.token = token; // we will save the token that facebook provides to the user                    
@@ -224,8 +220,6 @@ module.exports = function(passport) {
             } else{
             	// user already exists and is logged in, we have to link accounts
                 var user            = req.user; // pull the user out of the session
-
-                console.log("Google+ token (link): " + token);
 
                 // update the current users google+ data
                 user.google.id    = profile.id;

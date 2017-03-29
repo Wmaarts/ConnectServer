@@ -8,7 +8,7 @@ var serviceSchema = new mongoose.Schema({
 	date: {type: Date, required: true},
 	location: { type: mongoose.Schema.Types.ObjectId, ref: 'GeoLocation'},
 	usersVisited: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-	photo: { type: String}
+	photo: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Photo'}]
 });
 
 console.log('Giving mongo the service model');

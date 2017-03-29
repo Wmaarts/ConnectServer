@@ -7,7 +7,7 @@ var roles = ['user', 'moderator', 'admin']
 
 var userSchema = new mongoose.Schema({
 	telNr: {type: String},
-	role: {type: String, required: true, enum: roles, unique: false, default: "moderator"},
+	role: {type: String, required: true, enum: roles, unique: false, default: "moderator"}, // TODO: <- change this to 'user'
 	photo: {type: String},
 	name: {type: String},
 	local            : {
@@ -25,7 +25,7 @@ var userSchema = new mongoose.Schema({
         token        : String,
         email        : String,
         name         : String
-    }
+    } 	
 });
 
 //generating a hash

@@ -78,7 +78,10 @@ definitions:
         type: string
   ErrorResponse:
     required:
+      - code
       - message
     properties:
+      code:
+        type: number
       message:
         type: string

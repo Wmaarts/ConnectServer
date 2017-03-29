@@ -1,20 +1,24 @@
-module.exports = function(app, passport) {
+var ConnectRoles = require('connect-roles');
+var roles = new ConnectRoles();
+
+module.exports = function(app, user, passport) {
 
     // HOME PAGE (with login links) ========
     app.get('/', function(req, res) {
+    	if(req.user) res.redirect('/profile'); 
         res.render('index.html'); // load the index.html file
     });
 
     // LOGIN ===============================
     // show the login form
-    app.get('/login', function(req, res) {
+    app.get('/login', user.can('access home page'), function(req, res) {
 
         // render the page and pass in any flash data if it exists
         res.render('login.html', { message: req.flash('loginMessage') }); 
     });
     
     // process the login form
-    app.post('/login', passport.authenticate('local-login', {
+    app.post('/login', user.can('access home page'), passport.authenticate('local-login', {
         successRedirect : '/profile', // redirect to the secure profile section
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
@@ -43,7 +47,7 @@ module.exports = function(app, passport) {
     // PROFILE SECTION =====================
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
-    app.get('/profile', isLoggedIn, function(req, res) {
+    app.get('/profile', user.can('access CRUD'), isLoggedIn, function(req, res) {
         res.render('profile.html', {
             user : req.user // get the user out of session and pass to template
         });

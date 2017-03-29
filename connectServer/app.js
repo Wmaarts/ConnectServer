@@ -3,11 +3,10 @@
 var express = require('express')
 var app = express();
 var http = require('http').Server(app);
-//var io = require('socket.io')(http);
 
 var SwaggerExpress = require('swagger-express-mw');
-//var app = require('express')();
 var passport = require('passport');
+var ConnectRoles = require('connect-roles');
 var flash    = require('connect-flash');
 
 var morgan       = require('morgan');
@@ -48,21 +47,62 @@ app.engine('html', require('hbs').__express);
 
 require('./config/passport/passport')(passport); // pass passport for configuration
 
-//set up our express application
+// Set up our express application
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
 
-//required for passport
+// Required for passport
 app.use(session({ secret: 'this-is-the-secret-cookie-for-our-connect-app' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
+// Required for connect-roles
+var user = new ConnectRoles({
+  failureHandler: function (req, res, action) {
+    // optional function to customise code that runs when
+    // user fails authorisation
+    var accept = req.headers.accept || '';
+    res.status(403);
+    if (~accept.indexOf('html')) {
+    	res.render('html-error', {code: 403, text: "Access Denied"});
+    } else {
+    	res.send('Access Denied - You don\'t have permission to: ' + action);
+    }
+  }
+});
+app.use(user.middleware());
+
+//anonymous users can only access the home page
+//returning false stops any more rules from being
+//considered
+user.use(function (req, action) {
+if (!req.isAuthenticated()) return action === 'access home page';
+})
+
+//moderator users can access private page, but
+//they might not be the only ones so we don't return
+//false if the user isn't a moderator
+user.use('access CRUD', function (req) {
+if (req.user.role === 'moderator') {
+  console.log("User: " + req.user);
+  return true;
+}
+})
+
+//admin users can access all pages
+user.use(function (req) {
+if (req.user.role === 'admin') {
+  return true;
+}
+});
+
+// Make the public folder public
 app.use(express.static("public"));
 
 //routes ======================================================================
-require('./api/routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+require('./api/routes/routes.js')(app, user, passport); // load our routes and pass in our app and fully configured passport
 
 var config = {
   appRoot: __dirname // required config

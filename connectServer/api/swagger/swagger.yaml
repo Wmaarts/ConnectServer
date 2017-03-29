@@ -487,7 +487,10 @@ definitions:
       - description
   ErrorResponse:
     required:
+      - code
       - message
     properties:
+      code:
+        type: number
       message:
         type: string

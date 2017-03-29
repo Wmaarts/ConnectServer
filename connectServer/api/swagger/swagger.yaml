@@ -400,7 +400,10 @@ definitions:
     properties:
       name:
         type: string
-      date:
+      startDate:
+        type: string
+        format: date-time
+      endDate:
         type: string
         format: date-time
       description:
@@ -419,7 +422,8 @@ definitions:
           type: string
     required:
       - name
-      - date
+      - startDate
+      - endDate
       - description
       - geolocation
       
@@ -468,8 +472,6 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/Photo"
-              
-  
         
   GeneralResponse:
     type: object

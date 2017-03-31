@@ -2,6 +2,7 @@ var q = require('q');
 
 var mongoose = require('mongoose');
 User = mongoose.model('User');
+Geolocation = mongoose.model('Geolocation');
 
 
 function fillUsers(overwrite){
@@ -36,7 +37,6 @@ function fillUsers(overwrite){
 						// Error handling
 						model.save(function(err){
 							console.error(err);
-							model.save(err);
 						});
 					})
 				});
@@ -46,6 +46,44 @@ function fillUsers(overwrite){
 			return;
 		});
 };
+
+function fillGeolocations(overwrite) {
+	var testData = [
+		{
+			"_id" : "58de221418c06e4cccd7f3df",
+			"name" : "Connect Revius Wijk Lyceum",
+			"longitude" : 51.982319,
+			"latitude" : 5.338590,
+		},
+		{
+			"_id" : "58de221418c06e4cccd7f3e0",
+			"name" : "Avans Hogeschool 's-Hertogenbosch",
+			"longitude" : 51.688705,
+			"latitude": 5.287003,
+		},
+	];
+
+	Geolocation.find({}, function(err, geolocations) {
+		if (overwrite || geolocations.length <= 1) {
+			console.log('Clearing geolocations and creating new testdata');
+			Geolocation.remove({}, function(){
+				// First remove all previous users, then create the new ones
+				
+				testData.forEach(function(newGeo){
+					var model = new Geolocation(newGeo);
+					
+					// Error handling
+					model.save(function(err){
+						console.error(err); // oh no.
+					});
+				})
+			});
+		} 
+		else {
+			console.log('Skipping create geolocations testdata, already present');
+		}
+	});
+}
 
 //function fillTestAuthors(overwrite){
 //	Book.findOne({title: 'One Flew Over Shit'}).exec(function(err, book){
@@ -83,5 +121,6 @@ function fillUsers(overwrite){
 
 module.exports = function(){
 	var overwrite = true;
-	q.fcall(fillUsers(overwrite)); //.then(fillTestAuthors(overwrite));
+	q.fcall(fillUsers(overwrite))
+		.then(fillGeolocations(overwrite)); //.then(fillTestAuthors(overwrite));
 }

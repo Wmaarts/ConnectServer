@@ -8,7 +8,7 @@ var roles = ['user', 'moderator', 'admin']
 var userSchema = new mongoose.Schema({
 	telNr: {type: String},
 	role: {type: String, required: true, enum: roles, unique: false, default: "user"},
-	photo: {type: String},
+	photoString: {type: String},
 	name: {type: String},
 	local            : {
 		email        : {type: String},

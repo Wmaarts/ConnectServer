@@ -3,19 +3,20 @@
 
 
 Mark-Jan:
-- API documentatie dmv swagger
++ API documentatie dmv swagger
 - Query-string in een API call. (search voor users / date before/after voor service)
 - Gepagineerd ophalen
 
 Wouter:
-+ (done) Models in mongoose implementeren
-+ (done) Autorisatie & authenticatie
-- Websockets implementeren
- => Websocket tussen controller en view. Dus live updaten in de view via socket.
- => Lijst van personen die er zijn -> live updaten in de browser
++ Models in mongoose implementeren
++ Autorisatie & authenticatie
++ Websockets implementeren
+ - Websocket tussen controller en view. Dus live updaten in de view via socket.
+ - Lijst van personen die er zijn -> live updaten in de browser
+/ Mocha testing
+/ Run on server
 
 TODO:
-- Mocha testing
 - CRUD view
 - Demonstratie voorbereiden
 - APIs met leesbare parameters (ipv object.id)

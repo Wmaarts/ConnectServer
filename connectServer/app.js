@@ -17,7 +17,7 @@ var session      = require('express-session');
 
 //Data Access Layer
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/connect-cms');
+mongoose.connect('mongodb://admin:admin@ds139438.mlab.com:39438/connect-cms');
 mongoose.Promise = require('q').Promise;
 // /Data Access Layer
 
@@ -81,31 +81,30 @@ app.use(user.middleware());
 //returning false stops any more rules from being
 //considered
 user.use(function (req, action) {
-if (!req.isAuthenticated()) return action === 'access home page';
+	if (!req.isAuthenticated()) return action === 'access home page';
 })
 
 //moderator users can access private page, but
 //they might not be the only ones so we don't return
 //false if the user isn't a moderator
 user.use('access CRUD', function (req) {
-if (req.user.role === 'moderator') {
-  console.log("User: " + req.user);
-  return true;
-}
+	if (req.user.role === 'moderator') {
+	  return true;
+	}
 })
 
 //admin users can access all pages
 user.use(function (req) {
-if (req.user.role === 'admin') {
-  return true;
-}
+	if (req.user.role === 'admin') {
+	  return true;
+	}
 });
 
 // Make the public folder public
 app.use(express.static("public"));
 
 //routes ======================================================================
-require('./api/routes/routes.js')(app, user, passport); // load our routes and pass in our app and fully configured passport
+require('./routes/routes.js')(app, user, passport); // load our routes and pass in our app and fully configured passport
 
 var config = {
   appRoot: __dirname // required config
@@ -133,7 +132,6 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   		counter++;
   		socket.emit('number', counter);
   	}, 1000);
-  	
   });
   
   console.log('URL: http://127.0.0.1:' + port);

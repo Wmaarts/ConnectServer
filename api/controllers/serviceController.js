@@ -43,7 +43,7 @@ function getServiceById(req, res) {
 
 function getServiceList(req, res) {
     var query = {};
-	var result = User.find(query, function(err, serviceList) {
+	var result = Service.find(query, function(err, serviceList) {
 		return res.json(serviceList);
     });
 }

@@ -37,7 +37,9 @@ function fillUsers(overwrite){
 						
 						// Error handling
 						model.save(function(err){
-							if(err) { console.error(err); }
+							if(err) {
+								console.error(err);
+							}
 						});
 					})
 				});
@@ -54,8 +56,8 @@ function fillServices(overwrite) {
 			"_id" : "58de464012fdf76df0e221a6",
 			"name" : "Test-Service",
 			"description" : "Desc",
-			"startDate" : "2016-04-16T16:06:05Z",
-			"endDate" : "2016-04-16T18:06:05Z",
+			"startDateTime" : "2016-04-16T16:06:05Z",
+			"endDateTime" : "2016-04-16T18:06:05Z",
 		},
 	];
 
@@ -70,7 +72,9 @@ function fillServices(overwrite) {
 					
 					// Error handling
 					model.save(function(err) {
-						if(err) { console.error(err); /* oh no. */ }
+						if(err) {
+							console.error(err); // oh no.
+						}
 					});
 				})
 			});
@@ -108,7 +112,9 @@ function fillGeolocations(overwrite) {
 					
 					// Error handling
 					model.save(function(err){
-						if(err) { console.error(err);}
+						if(err) {
+							console.error(err); // oh no.
+						}
 					});
 				})
 			});

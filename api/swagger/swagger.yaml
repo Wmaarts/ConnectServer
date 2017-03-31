@@ -274,6 +274,27 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  
+  /services/user/onsite/{id}:
+    x-swagger-router-controller: serviceController
+    post:
+      description: Post a user to the service onSite
+      operationId: postUserOnSite
+      parameters:
+        - name: id
+          type: string
+          description: user id reference who is on site
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/GetServiceResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
     
   /swagger:
     x-swagger-pipe: swagger_raw
@@ -294,7 +315,6 @@ definitions:
       - photoString
       - firstUserId
       - secondUserId
-  
   User:
     type: object
     properties:
@@ -308,7 +328,6 @@ definitions:
         type: string
     required:
       - name
-      
   PostPutUser:
     type: object
     properties:
@@ -320,16 +339,15 @@ definitions:
         $ref: "#/definitions/User/properties/photoString"
     required:
       - name
-  
   Service:
     type: object
     properties:
       name:
         type: string
-      startDate:
+      startDateTime:
         type: string
         format: date-time
-      endDate:
+      endDateTime:
         type: string
         format: date-time
       description:
@@ -348,11 +366,10 @@ definitions:
           type: string
     required:
       - name
-      - startDate
-      - endDate
+      - startDateTime
+      - endDateTime
       - description
       - geolocation
-      
   Geolocation:
     type: object
     properties:
@@ -367,12 +384,10 @@ definitions:
         type: number
         format: float
         description: x-horizontal coordinate on map
-  
   GetPhotoResponse:
     properties:
       Photo:
         $ref: "#/definitions/Photo"
-        
   GetUserListResponse:
     required:
       - users
@@ -382,17 +397,14 @@ definitions:
         type: array
         items: 
           $ref: "#/definitions/User"
-              
   GetUserResponse:
     properties:
       user:
         $ref: "#/definitions/User"
-        
   GetServiceResponse:
     properties:
       service:
         $ref: "#/definitions/Service"
-  
   GetServiceListResponse:
     required:
       - services
@@ -401,7 +413,6 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/Service"
-  
   GetPhotoListResponse:
     required:
       - photos
@@ -410,7 +421,6 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/Photo"
-        
   ErrorResponse:
     required:
       - code

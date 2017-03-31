@@ -19,14 +19,11 @@ var session      = require('express-session');
 var mongoose = require('mongoose');
 if (process.env.NODE_ENV == "production") {
 	console.log("[Mongo] Using Production DB");
-	mongoose.connect('mongodb://admin:admin@ds139438.mlab.com:39438/connect-cms'	); // DEV database
+	mongoose.connect('mongodb://admin:admin@ds139438.mlab.com:39438/connect-cms'); // DEV database
 }
-else if (process.env.NODE_ENV == "development"){
+else {
 	console.log("[Mongo] Using Development DB");
 	mongoose.connect('mongodb://localhost:27017/connect-cms'); // Local database
-}
-else{
-	console.log("[Mongo] " + process.env.NODE_ENV);
 }
 mongoose.Promise = require('q').Promise;
 // /Data Access Layer
@@ -143,8 +140,6 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   		socket.emit('number', counter);
   	}, 1000);
   });
-  
-  console.log('URL: http://127.0.0.1:' + port);
 });
 
 module.exports = app; // for testing

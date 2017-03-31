@@ -20,8 +20,9 @@ function addUser(req, res) {
 	var user = new User(req.body);
 
 	user.save()
-		.then(savedPhoto => {
-			res.json({success: 1, description: "User added"});
+		.then(savedUser => {
+			res.status(201);
+			res.json(savedUser);
 		})
 		.fail(err => handleError(req, res, 500, err));
 }
@@ -61,9 +62,10 @@ function updateUserById(req, res) {
 		// Save user
 		user.save(function (err, user) { // also a javascript callback
 			if (err) {
-				res.status(500).send(err); // error handling
+				return res.status(500).send(err); // error handling
 			}
-			res.json({success: 1, description: "User updated"});
+			res.status(200);
+			res.json(user);
 		});
 	})
 	.fail(err => handleError(req, res, 500, err));

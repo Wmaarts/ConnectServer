@@ -36,10 +36,13 @@ function handleError(req, res, statusCode, message){
 require('./api/models/user');
 require('./api/models/photo');
 require('./api/models/service');
+require('./api/models/geolocation');
+
+// Fill Testdata
 require('./api/helpers/fillTestData')();
 
 // Routes
-app.use('/users', require('./api/routes/users')(handleError));
+// app.use('/users', require('./api/routes/users')(handleError));
 
 // Handlebars 
 app.set('view engine', 'html');

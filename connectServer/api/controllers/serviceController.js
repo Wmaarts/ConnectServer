@@ -25,7 +25,7 @@ function addService(req, res) {
         if (err) {
             return res.status(500).send(err); // error handling
         }
-        return res.json({success: 1, description: "User posted"});
+        return res.json({success: 1, description: "Service posted"});
     });
 }
 

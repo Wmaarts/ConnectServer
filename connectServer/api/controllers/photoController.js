@@ -29,8 +29,8 @@ function addPhoto(req, res) {
 			// console.log("err: "+err); // err makes the code crash derp
 
 			// TODO -> add the photo to a service
-
-			res.json({success: 1, description: "Photo added"});
+			res.status(201);
+			res.json(savedPhoto);
 		})
 		.fail(err => handleError(req, res, 500, err));
 }

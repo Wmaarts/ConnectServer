@@ -17,7 +17,8 @@ var session      = require('express-session');
 
 //Data Access Layer
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://admin:admin@ds139438.mlab.com:39438/connect-cms');
+mongoose.connect('mongodb://localhost:27017/connect-cms'); // Local database
+//mongoose.connect('mongodb://admin:admin@ds139438.mlab.com:39438/connect-cms'	); // DEV database
 mongoose.Promise = require('q').Promise;
 // /Data Access Layer
 

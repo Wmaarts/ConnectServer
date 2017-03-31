@@ -20,7 +20,7 @@ function fillUsers(overwrite){
 			"name": "test",
 		    "role" : "user",
 		    "__v" : 0
-		},
+		}
 	];
 
 	User.find({})

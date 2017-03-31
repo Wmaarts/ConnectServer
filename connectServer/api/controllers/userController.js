@@ -6,6 +6,7 @@
 
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var handleError = require('../helpers/errorhandler')
 
 module.exports = {
 	postUser: addUser,
@@ -21,7 +22,8 @@ function addUser(req, res) {
 
 	user.save()
 		.then(savedPhoto => {
-			res.json({success: 1, description: "User added"});
+			res.status(201);
+			res.json(user);
 		})
 		.fail(err => handleError(req, res, 500, err));
 }
@@ -41,6 +43,9 @@ function getUserById(req, res) {
 	query._id = req.swagger.params.id.value;
 
 	var userResult = User.findById(query).then(data => {
+		if(data == null){
+			return handleError(req, res, 404, "Not found");
+		}
 		res.json(data);
 	})
 	.fail(err => handleError(req, res, 500, err));

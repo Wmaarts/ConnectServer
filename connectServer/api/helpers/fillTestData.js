@@ -37,9 +37,7 @@ function fillUsers(overwrite){
 						
 						// Error handling
 						model.save(function(err){
-							if(err) {
-								console.error(err);
-							}
+							if(err) { console.error(err); }
 						});
 					})
 				});
@@ -72,9 +70,7 @@ function fillServices(overwrite) {
 					
 					// Error handling
 					model.save(function(err) {
-						if(err) {
-							console.error(err); // oh no.
-						}
+						if(err) { console.error(err); /* oh no. */ }
 					});
 				})
 			});
@@ -112,9 +108,7 @@ function fillGeolocations(overwrite) {
 					
 					// Error handling
 					model.save(function(err){
-						if(err) {
-							console.error(err); // oh no.
-						}
+						if(err) { console.error(err);}
 					});
 				})
 			});

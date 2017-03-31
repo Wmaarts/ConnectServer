@@ -3,7 +3,7 @@
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script src="/socket.io.js"></script>
 <script>
-  var socket = io.connect('http://localhost:10010');
+  var socket = io.connect('http://connect-ku.herokuapp.com');
   socket.on('number', function(msg){
       $('#messages').html('You have been waiting for ' + msg + ' second(s)!');
   });

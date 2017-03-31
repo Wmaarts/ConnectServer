@@ -17,8 +17,17 @@ var session      = require('express-session');
 
 //Data Access Layer
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/connect-cms'); // Local database
-//mongoose.connect('mongodb://admin:admin@ds139438.mlab.com:39438/connect-cms'	); // DEV database
+if (process.env.NODE_ENV == "production") {
+	console.log("[Mongo] Using Production DB");
+	mongoose.connect('mongodb://admin:admin@ds139438.mlab.com:39438/connect-cms'	); // DEV database
+}
+else if (process.env.NODE_ENV == "development"){
+	console.log("[Mongo] Using Development DB");
+	mongoose.connect('mongodb://localhost:27017/connect-cms'); // Local database
+}
+else{
+	console.log("[Mongo] " + process.env.NODE_ENV);
+}
 mongoose.Promise = require('q').Promise;
 // /Data Access Layer
 

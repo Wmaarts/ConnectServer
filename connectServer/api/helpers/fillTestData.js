@@ -3,6 +3,7 @@ var q = require('q');
 var mongoose = require('mongoose');
 User = mongoose.model('User');
 Geolocation = mongoose.model('Geolocation');
+Service = mongoose.model('Service');
 
 
 function fillUsers(overwrite){
@@ -36,7 +37,9 @@ function fillUsers(overwrite){
 						
 						// Error handling
 						model.save(function(err){
-							console.error(err);
+							if(err) {
+								console.error(err);
+							}
 						});
 					})
 				});
@@ -46,6 +49,41 @@ function fillUsers(overwrite){
 			return;
 		});
 };
+
+function fillServices(overwrite) {
+	var testData = [
+		{
+			"_id" : "58de464012fdf76df0e221a6",
+			"name" : "Test-Service",
+			"description" : "Desc",
+			"startDate" : "2016-04-16T16:06:05Z",
+			"endDate" : "2016-04-16T18:06:05Z",
+		},
+	];
+
+	Service.find({}, function(err, services) {
+		if (overwrite || services.length <= 1) {
+			console.log('Clearing services and creating new testdata');
+			Service.remove({}, function(){
+				// First remove all previous users, then create the new ones
+				
+				testData.forEach(function(newService){
+					var model = new Service(newService);
+					
+					// Error handling
+					model.save(function(err) {
+						if(err) {
+							console.error(err); // oh no.
+						}
+					});
+				})
+			});
+		} 
+		else {
+			console.log('Skipping create services testdata, already present');
+		}
+	});
+}
 
 function fillGeolocations(overwrite) {
 	var testData = [
@@ -74,7 +112,9 @@ function fillGeolocations(overwrite) {
 					
 					// Error handling
 					model.save(function(err){
-						console.error(err); // oh no.
+						if(err) {
+							console.error(err); // oh no.
+						}
 					});
 				})
 			});
@@ -122,5 +162,6 @@ function fillGeolocations(overwrite) {
 module.exports = function(){
 	var overwrite = true;
 	q.fcall(fillUsers(overwrite))
+		.then(fillServices(overwrite))
 		.then(fillGeolocations(overwrite)); //.then(fillTestAuthors(overwrite));
 }

@@ -10,7 +10,9 @@ var Service = mongoose.model('Service');
 module.exports = {
     postService: addService,
     getService: getServiceById,
+    getServices: getServiceList,
     putService: updateServiceById,
+    deleteService: deleteServiceById,
 };
 
 function addService(req, res) {
@@ -36,6 +38,13 @@ function getServiceById(req, res) {
             res.status(500).send(err); // err handling
         }
         res.json(service);
+    });
+}
+
+function getServiceList(req, res) {
+    var query = {};
+	var result = User.find(query, function(err, serviceList) {
+		return res.json(serviceList);
     });
 }
 
@@ -68,7 +77,16 @@ function updateServiceById(req, res) {
             res.json({success: 1, description: "Service updated"});
         });
     });
+}
+    
+function deleteServiceById(req, res) {
+    var query = {};
+    query._id = req.swagger.params.id.value;
 
-    // TODO Delete
-
+    var serviceResult = Service.findByIdAndRemove(query, function(err, service) {
+        if (err) {
+            res.status(500).send(err);
+        }
+        res.json({success: 1, description: "Service deleted"});
+    });
 }

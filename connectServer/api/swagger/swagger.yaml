@@ -292,6 +292,20 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+    get:
+      description: Returns all the services to the caller
+      operationId: getServices
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/GetServiceListResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
       
             
   /service/{id}:
@@ -463,6 +477,15 @@ definitions:
     properties:
       service:
         $ref: "#/definitions/Service"
+  
+  GetServiceListResponse:
+    required:
+      - services
+    properties:
+      services:
+        type: array
+        items:
+          $ref: "#/definitions/Service"
   
   GetPhotoListResponse:
     required:

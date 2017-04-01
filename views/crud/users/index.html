@@ -1,0 +1,31 @@
+{{> 'crudHeader'}}
+	
+	<table class="table">
+       	<thead>
+            <tr>
+                <th data-field="name">Name</th>
+                <th/>
+                <th/>
+            </tr>
+    	</thead>
+    	<tbody>
+    		{{#each users}}
+			  <tr>
+				  <td>{{this.name}}</td>
+				  <td><a class="button" href="/user/edit/{{this._id}}">EDIT</a></td>
+				  <td><a class="button" href="/user/delete/{{this._id}}">DELETE</a></td>
+			  </tr>
+			{{/each}}
+    	</tbody>
+    </table>
+	
+	
+	<ul>
+	
+	</ul>
+    <div class="container">
+      <div class="starter-template">
+        <a class="button" href="/user/create">New user</a>
+      </div>
+    </div><!-- /.container -->
+{{> 'crudFooter'}}

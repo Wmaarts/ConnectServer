@@ -94,9 +94,7 @@ function deleteServiceById(req, res) {
 
 function addUserVisitedById(req, res) {
     var thisMoment = moment();
-    console.log(thisMoment);
     var previousMoment = moment().subtract(1, 'days');
-    console.log(previousMoment);
 
     var query = {
         "$and" : [
@@ -109,26 +107,18 @@ function addUserVisitedById(req, res) {
     ]};
 
     var serviceResult = Service.findOne(query, function(err, service) {
-        console.log("inside");
         if (err) {
             res.status(500).send(err); // err handling
             return res.json({});
         }
 
-        console.log(service);
-        console.log(req.swagger.params.id.value);
-
-        console.log(contains.call(service.usersVisited, req.swagger.params.id.value));
-
-        if (contains.call(service.usersVisited, req.swagger.params.id.value) === false) {
-            service.usersVisited.push(req.swagger.params.id.value);
-            console.log("pushed.");
+        if (contains(service.usersVisited, req.body._id) === false) {
+            service.usersVisited.push(req.body._id);
         }
         else {
-            return console.log("Todo error handling");
+            return res.json(service); // no modification
         }
 
-        console.log("about to save");
         service.save(function(err, service) {
             if (err) {
                 res.status(500).send(err); // err handling
@@ -138,29 +128,13 @@ function addUserVisitedById(req, res) {
     });
 }
 
-var contains = function(needle) {
-    // Per spec, the way to identify NaN is that it is not equal to itself
-    var findNaN = needle !== needle;
-    var indexOf;
-
-    if(!findNaN && typeof Array.prototype.indexOf === 'function') {
-        indexOf = Array.prototype.indexOf;
-    } else {
-        indexOf = function(needle) {
-            var i = -1, index = -1;
-
-            for(i = 0; i < this.length; i++) {
-                var item = this[i];
-
-                if((findNaN && item !== item) || item === needle) {
-                    index = i;
-                    break;
-                }
-            }
-
-            return index;
-        };
+function contains(a, obj) {
+    console.log("obj: " + obj);
+    for (var i = 0; i < a.length; i++) {
+        console.log("a[i]: "+ a[i]);
+        if (a[i] == obj) {
+            return true;
+        }
     }
-
-    return indexOf.call(this, needle) > -1;
-};
+    return false;
+}

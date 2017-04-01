@@ -1,8 +1,25 @@
 {{> 'crudHeader'}}
-	<div enctype='application/json' class="container" style="padding:40px">
-		<form method="post" action="/users" name="addUser">
-			<label>Name:  </label>
-			<input type="text" name="name" placeholder="insert name here"/>
+	<div class="container">
+		<form id="form" method="post" action="/user/edit/{{model._id}}" name="addUser">
+			<label>* = required</label>
+			<br/>
+			<label>Name* :</label>
+			<input type="text" name="name" id="name" value="{{model.name}}"/>
+			<br/>
+			<label>Tel. Nr:</label>
+			<input type="number" name="telNr" id="telNr" value="{{model.telNr}}"/>
+			<br/>
+			<label>Role* :</label>
+			<select name="role" id="role">
+				<option value="user">User</option>
+				<option value="moderator" >Moderator</option>
+				<option value="admin">Admin</option>
+			</select>
+			<br/>
+			<input type="submit" value="Submit">
 		</form>
 	</div>
+	<script>
+		$("#role").val('{{model.role}}').prop('selected', true);
+	</script>
 {{> 'crudFooter'}}

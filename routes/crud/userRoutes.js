@@ -8,21 +8,80 @@ module.exports = function(app, user, passport, url) {
     	var result = User.find({}).then(data => {
     		res.render('crud/users/index.html', {users: data}); 
     	})
-    	.fail(err => handleError(req, res, 500, err));
+    	.fail(err => res.render('crud/users/index.html', {err: err}));
     });
 	
 	// CREATE
+    // Get
     app.get(url + '/create', user.can('access CRUD'), function(req, res) {
         res.render('crud/users/create.html'); 
     });
-
-    // UPDATE
-    app.get(url + '/edit/:id', user.can('access CRUD'), function(req, res) {
-    	res.render('crud/users/edit.html'); 
+    
+    // Post
+    app.post(url + '/create', user.can('access CRUD'), function(req, res) {
+    	var user = new User(req.body);
+    	
+    	console.log(user.validate());
+    	
+    	user.save().then(savedUser => {
+    		res.redirect(url);
+		})
+		.fail(err => res.render('crud/users/create.html', {err: err}));
     });
 
     // UPDATE
+    // Get
+    app.get(url + '/edit/:id', user.can('access CRUD'), function(req, res) {
+		var query = {};
+
+		//req.swagger contains the path parameters
+		query._id = req.params.id;
+
+		var userResult = User.findById(query).then(data => {
+			if(data == null){
+				res.render('crud/users/index.html', {err: "User not found!"});
+			}
+	    	res.render('crud/users/edit.html', { model: data }); 
+		})
+		.fail(err => res.render('crud/users/index.html', {err: err}));
+    });
+    
+    // POST
+    app.post(url + '/edit/:id', user.can('access CRUD'), function(req, res) {
+    	var query = {};
+
+    	console.log(req.params.id);
+    	//req.swagger contains the path parameters
+    	query._id = req.params.id;
+
+    	var userResult = User.findById(query).then(user => { // callback method
+    		user.name = req.body.name || user.name;
+    		user.role = req.body.role || user.role;
+    		user.telephonenumber = req.body.telephonenumber || user.telephonenumber;
+
+    		// Save user
+    		user.save(function (err, user) { // also a javascript callback
+    			if (err) {
+    				res.render('crud/users/index.html', {err: err}); // error handling
+    			}
+    			res.redirect(url);
+    		});
+    	})
+    	.fail(err => res.render('crud/users/index.html', {err: err}));
+    });
+
+    // DELETE
     app.get(url + '/delete/:id', user.can('access CRUD'), function(req, res) {
-    	res.render('crud/users/edit.html'); 
+    	var query = {};
+    	query._id = req.params.id;
+
+    	var userResult = User.findByIdAndRemove(query);
+
+    	userResult.then(data => {
+    		res.redirect(url);
+    	})
+    	.fail(err => alert(err));
+    	
+    	res.redirect(url); 
     });
 }

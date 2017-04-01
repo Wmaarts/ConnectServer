@@ -4,23 +4,19 @@
    	<thead>
         <tr>
             <th data-field="name">Name</th>
-            <th data-field="mail">Mail</th>
-            <th data-field="role">Role</th>
+            <th data-field="startTime">Start time:</th>
+            <th data-field="endTime">End time:</th>
             <th/>
             <th/>
         </tr>
 	</thead>
 	<tbody>
-		{{#each users}}
+		{{#each services}}
 		  <tr>
 			  <td>{{this.name}}</td>
-			  <td>
-			  	{{#if this.local.email}}{{this.local.email}}
-			  	{{else if this.facebook.email}}{{this.facebook.email}}
-				{{else if this.google.email}}{{this.google.email}}
-				{{/if}}
-			  <td>{{this.role}}</td>
-			  <td><a class="btn btn-warning" href="/user/edit/{{this._id}}">EDIT</a></td>
+			  <td>{{this.startDateTime}}</td>
+			  <td>{{this.endDateTime}}</td>
+			  <td><a class="btn btn-warning" href="/service/edit/{{this._id}}">EDIT</a></td>
 			  <td><button class="btn btn-danger" name="deleteButton" id={{this._id}}>DELETE</button></td>
 		  </tr>
 		{{/each}}
@@ -28,7 +24,7 @@
 </table>
 <div class="container">
   <div class="starter-template">
-    <a class="btn btn-success" href="/user/create">New user</a>
+    <a class="btn btn-success" href="/service/create">New service</a>
   </div>
 </div><!-- /.container -->
     
@@ -37,7 +33,7 @@ var elements = document.querySelectorAll('[name="deleteButton"]');
 for (var i = 0; i < elements.length; i++) {
   elements[i].addEventListener("click", function() {
     if (confirm('Are you sure you want to delete this model?')) {
-    	window.location.href = '/user/delete/' + this.id;
+    	window.location.href = '/service/delete/' + this.id;
 	} else {
 	    // Do nothing!
 	}

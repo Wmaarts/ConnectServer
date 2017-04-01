@@ -6,6 +6,7 @@
 
 var mongoose = require('mongoose');
 var Service = mongoose.model('Service');
+var moment = require('moment-timezone');
 
 module.exports = {
     postService: addService,
@@ -13,6 +14,7 @@ module.exports = {
     getServices: getServiceList,
     putService: updateServiceById,
     deleteService: deleteServiceById,
+    postUserOnSite: addUserVisitedById,
 };
 
 function addService(req, res) {
@@ -54,13 +56,12 @@ function updateServiceById(req, res) {
 
 	var serviceResult = Service.findById(query, function (err, service) {
         if (err) {
-            res.status(500).send(err); // err handling
-            res.json({})
+            return res.status(500).send(err); // err handling
         }
 
         service.name = req.body.name || service.name;
-        service.startDate = req.body.startDate || service.startDate;
-        service.endDate = req.body.endDate || service.endDate;
+        service.startDateTime = req.body.startDateTime || service.startDateTime;
+        service.endDateTime = req.body.endDateTime || service.endDateTime;
         service.description = req.body.description || service.description;
         
         // This probably works? I just don't know. It works if it exists, probs
@@ -72,9 +73,9 @@ function updateServiceById(req, res) {
         
         service.save(function(err, service) {
             if (err) {
-                res.status(500).send(err); // err handling
+                return res.status(500).send(err); // err handling
             }
-            res.json({success: 1, description: "Service updated"});
+            return res.json(service);
         });
     });
 }
@@ -89,4 +90,51 @@ function deleteServiceById(req, res) {
         }
         res.json({success: 1, description: "Service deleted"});
     });
+}
+
+function addUserVisitedById(req, res) {
+    var thisMoment = moment();
+    var previousMoment = moment().subtract(1, 'days');
+
+    var query = {
+        "$and" : [
+            {
+                startDateTime : { 
+                    $lt: thisMoment, 
+                    $gt: previousMoment, 
+                },
+            },
+    ]};
+
+    var serviceResult = Service.findOne(query, function(err, service) {
+        if (err) {
+            res.status(500).send(err); // err handling
+            return res.json({});
+        }
+
+        if (contains(service.usersVisited, req.body._id) === false) {
+            service.usersVisited.push(req.body._id);
+        }
+        else {
+            return res.json(service); // no modification
+        }
+
+        service.save(function(err, service) {
+            if (err) {
+                res.status(500).send(err); // err handling
+            }
+            res.json(service);
+        });
+    });
+}
+
+function contains(a, obj) {
+    console.log("obj: " + obj);
+    for (var i = 0; i < a.length; i++) {
+        console.log("a[i]: "+ a[i]);
+        if (a[i] == obj) {
+            return true;
+        }
+    }
+    return false;
 }

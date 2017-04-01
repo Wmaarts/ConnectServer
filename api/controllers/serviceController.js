@@ -6,6 +6,7 @@
 
 var mongoose = require('mongoose');
 var Service = mongoose.model('Service');
+var moment = require('moment-timezone');
 
 module.exports = {
     postService: addService,
@@ -13,6 +14,7 @@ module.exports = {
     getServices: getServiceList,
     putService: updateServiceById,
     deleteService: deleteServiceById,
+    postUserOnSite: addUserVisitedById,
 };
 
 function addService(req, res) {
@@ -54,13 +56,12 @@ function updateServiceById(req, res) {
 
 	var serviceResult = Service.findById(query, function (err, service) {
         if (err) {
-            res.status(500).send(err); // err handling
-            res.json({})
+            return res.status(500).send(err); // err handling
         }
 
         service.name = req.body.name || service.name;
-        service.startDate = req.body.startDate || service.startDate;
-        service.endDate = req.body.endDate || service.endDate;
+        service.startDateTime = req.body.startDateTime || service.startDateTime;
+        service.endDateTime = req.body.endDateTime || service.endDateTime;
         service.description = req.body.description || service.description;
         
         // This probably works? I just don't know. It works if it exists, probs
@@ -72,9 +73,9 @@ function updateServiceById(req, res) {
         
         service.save(function(err, service) {
             if (err) {
-                res.status(500).send(err); // err handling
+                return res.status(500).send(err); // err handling
             }
-            res.json({success: 1, description: "Service updated"});
+            return res.json(service);
         });
     });
 }
@@ -90,3 +91,76 @@ function deleteServiceById(req, res) {
         res.json({success: 1, description: "Service deleted"});
     });
 }
+
+function addUserVisitedById(req, res) {
+    var thisMoment = moment();
+    console.log(thisMoment);
+    var previousMoment = moment().subtract(1, 'days');
+    console.log(previousMoment);
+
+    var query = {
+        "$and" : [
+            {
+                startDateTime : { 
+                    $lt: thisMoment, 
+                    $gt: previousMoment, 
+                },
+            },
+    ]};
+
+    var serviceResult = Service.findOne(query, function(err, service) {
+        console.log("inside");
+        if (err) {
+            res.status(500).send(err); // err handling
+            return res.json({});
+        }
+
+        console.log(service);
+        console.log(req.swagger.params.id.value);
+
+        console.log(contains.call(service.usersVisited, req.swagger.params.id.value));
+
+        if (contains.call(service.usersVisited, req.swagger.params.id.value) === false) {
+            service.usersVisited.push(req.swagger.params.id.value);
+            console.log("pushed.");
+        }
+        else {
+            return console.log("Todo error handling");
+        }
+
+        console.log("about to save");
+        service.save(function(err, service) {
+            if (err) {
+                res.status(500).send(err); // err handling
+            }
+            res.json(service);
+        });
+    });
+}
+
+var contains = function(needle) {
+    // Per spec, the way to identify NaN is that it is not equal to itself
+    var findNaN = needle !== needle;
+    var indexOf;
+
+    if(!findNaN && typeof Array.prototype.indexOf === 'function') {
+        indexOf = Array.prototype.indexOf;
+    } else {
+        indexOf = function(needle) {
+            var i = -1, index = -1;
+
+            for(i = 0; i < this.length; i++) {
+                var item = this[i];
+
+                if((findNaN && item !== item) || item === needle) {
+                    index = i;
+                    break;
+                }
+            }
+
+            return index;
+        };
+    }
+
+    return indexOf.call(this, needle) > -1;
+};

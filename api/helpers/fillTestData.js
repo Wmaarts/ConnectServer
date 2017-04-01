@@ -4,6 +4,8 @@ var mongoose = require('mongoose');
 User = mongoose.model('User');
 Geolocation = mongoose.model('Geolocation');
 Service = mongoose.model('Service');
+// var moment = require('moment');
+var moment = require('moment-timezone');
 
 
 function fillUsers(overwrite){
@@ -51,13 +53,27 @@ function fillUsers(overwrite){
 };
 
 function fillServices(overwrite) {
+	
+	var thisMoment = new moment();
+	var tomorrowsMoment = new moment().add(1, 'days');
+
 	var testData = [
 		{
 			"_id" : "58de464012fdf76df0e221a6",
-			"name" : "Test-Service",
+			"name" : "History-Service",
 			"description" : "Desc",
 			"startDateTime" : "2016-04-16T16:06:05Z",
 			"endDateTime" : "2016-04-16T18:06:05Z",
+			"geolocation" : "58de221418c06e4cccd7f3df",
+			
+		},
+		{
+			"_id" : "58de464012fdf76df0e221a7",
+			"name" : "Current-TestService",
+			"description" : "Yes.",
+			"startDateTime" : thisMoment,
+			"endDateTime" : tomorrowsMoment,
+			"geolocation" : "58de221418c06e4cccd7f3e0",
 		},
 	];
 
@@ -98,6 +114,7 @@ function fillGeolocations(overwrite) {
 			"name" : "Avans Hogeschool 's-Hertogenbosch",
 			"longitude" : 51.688705,
 			"latitude": 5.287003,
+			
 		},
 	];
 
@@ -128,6 +145,7 @@ function fillGeolocations(overwrite) {
 module.exports = function() {
 	var overwrite = true;
 	q.fcall(fillUsers(overwrite))
+		.then(fillGeolocations(overwrite))
 		.then(fillServices(overwrite))
-		.then(fillGeolocations(overwrite));
+		; // end fcall
 }

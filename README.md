@@ -20,6 +20,7 @@ TODO:
 - CRUD view
 - Demonstratie voorbereiden
 - APIs met leesbare parameters (ipv object.id)
+- Error handling API
 
 Extra:
 - Externe API's implementeren (Facebook)

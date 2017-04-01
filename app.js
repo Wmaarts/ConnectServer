@@ -3,6 +3,8 @@
 var express = require('express')
 var app = express();
 var http = require('http').Server(app);
+var hbs = require('hbs');
+var fs = require('fs');
 
 var SwaggerExpress = require('swagger-express-mw');
 var passport = require('passport');
@@ -28,16 +30,20 @@ else {
 mongoose.Promise = require('q').Promise;
 // /Data Access Layer
 
-function handleError(req, res, statusCode, message){
-    console.log();
-    console.log('-------- Error handled --------');
-    console.log('Request Params: ' + JSON.stringify(req.params));
-    console.log('Request Body: ' + JSON.stringify(req.body));
-    console.log('Response sent: Statuscode ' + statusCode + ', Message "' + message + '"');
-    console.log('-------- /Error handled --------');
-    res.status(statusCode);
-    res.json(message);
-};
+//function handleError(req, res, statusCode, message){
+//    console.log();
+//    console.log('-------- Error handled --------');
+//    console.log('Request Params: ' + JSON.stringify(req.params));
+//    console.log('Request Body: ' + JSON.stringify(req.body));
+//    console.log('Response sent: Statuscode ' + statusCode + ', Message "' + message + '"');
+//    console.log('-------- /Error handled --------');
+//    res.status(statusCode);
+//    res.json(message);
+//};
+
+// Register Handlebars partials
+//hbs.registerPartial('partial', fs.readFileSync(__dirname + '/views/partial.hbs', 'utf8'));
+hbs.registerPartials(__dirname + '/views/partials');
 
 // Load the models
 require('./api/models/user');
@@ -53,7 +59,7 @@ require('./api/helpers/fillTestData')();
 
 // Handlebars 
 app.set('view engine', 'html');
-app.engine('html', require('hbs').__express); 
+app.engine('html', hbs.__express); 
 
 require('./config/passport/passport')(passport); // pass passport for configuration
 

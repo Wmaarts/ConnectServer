@@ -9,6 +9,7 @@ mongoose.Promise = require('q').Promise;
 require('../api/models/photo');
 require('../api/models/user');
 require('../api/models/service');
+require('../api/models/geolocation');
 require('../api/helpers/fillTestData')();
 var userController = require('../api/controllers/userController');
 
@@ -38,7 +39,7 @@ function makeRequest(route, statusCode, done){
 describe('Testing user routes', function(){
 	describe('without params', function(){
 		it('should return all users', function(done){
-			makeRequest('/user', 200, function(err, res){
+			makeRequest('/users', 200, function(err, res){
 				if(err){ return done(err); }
 				
 				expect(res.body[0]._id).to.equal("58d52617e1b7270dc4714358");
@@ -51,7 +52,7 @@ describe('Testing user routes', function(){
 
 	describe('with id', function(){
 		it('should return a specific user', function(done){
-			makeRequest('/user/58d52617e1b7270dc4714358', 200, function(err, res){
+			makeRequest('/users/58d52617e1b7270dc4714358', 200, function(err, res){
 				if(err){return done(err)}
 				
 				expect(res.body.role).to.equal("moderator");
@@ -60,14 +61,14 @@ describe('Testing user routes', function(){
 		});
 
 		it('should return 404 on a wrong user', function(done){
-			makeRequest('/user/58d52617e1b7270dc4714357', 404, done);
+			makeRequest('/users/58d52617e1b7270dc4714357', 404, done);
 		});
 	});
 
 	describe(': creating a new one', function(){
 		it('should return the new one', function(done){
 			request(app)
-		      .post('/user')
+		      .post('/users')
 		      .send({"name" : "TestUser"})
 		      .expect(201)
 		      .end(function(err, res) {

@@ -21,8 +21,6 @@ module.exports = function(app, user, passport, url) {
     app.post(url + '/create', user.can('access CRUD'), function(req, res) {
     	var user = new User(req.body);
     	
-    	console.log(user.validate());
-    	
     	user.save().then(savedUser => {
     		res.redirect(url);
 		})
@@ -46,11 +44,10 @@ module.exports = function(app, user, passport, url) {
 		.fail(err => res.render('crud/users/index.html', {err: err}));
     });
     
-    // POST
+    // Post
     app.post(url + '/edit/:id', user.can('access CRUD'), function(req, res) {
     	var query = {};
 
-    	console.log(req.params.id);
     	//req.swagger contains the path parameters
     	query._id = req.params.id;
 

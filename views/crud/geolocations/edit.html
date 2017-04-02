@@ -1,0 +1,18 @@
+{{> 'crudHeader'}}
+	<div class="container">
+		<form id="form" method="post" action="">
+			<label>* = required</label>
+			<br/>
+			<label>Name* :</label>
+			<input type="text" name="name" id="name" value="{{model.name}}"/>
+			<br/>
+			<label>Latitude* :</label>
+			<input type="number" step="any" name="latitude" id="latitude" value="{{model.latitude}}"/>
+			<br/>
+			<label>Longitude* :</label>
+			<input type="number" step="any" name="longitude" id="longitude" value="{{model.longitude}}"/>
+			<br/>
+			<input type="submit" value="Submit">
+		</form>
+	</div>
+{{> 'crudFooter'}}

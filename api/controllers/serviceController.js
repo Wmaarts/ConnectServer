@@ -44,8 +44,27 @@ function getServiceById(req, res) {
 }
 
 function getServiceList(req, res) {
+    var gtDate = new moment(req.swagger.params.gtDate.value);
+    var ltDate = new moment(req.swagger.params.ltDate.value);
+
     var query = {};
-	var result = Service.find(query, function(err, serviceList) {
+
+    if (req.swagger.params.gtDate.value != undefined) { 
+        // if (query.startDateTime == undefined) {
+            query.startDateTime = {};
+        // }
+        query.startDateTime.$gt = gtDate; 
+    }
+
+    if (req.swagger.params.ltDate.value != undefined) { 
+        if (query.startDateTime == undefined) {
+            query.startDateTime = {};
+        }
+        query.startDateTime.$lt = ltDate; 
+    }
+
+    // Actual search using built query
+    var result = Service.find(query, function(err, serviceList) {
 		return res.json(serviceList);
     });
 }
@@ -121,9 +140,11 @@ function addUserVisitedById(req, res) {
 
         service.save(function(err, service) {
             if (err) {
-                res.status(500).send(err); // err handling
+                
+                return res.status(500).send(err); // err handling
             }
-            res.json(service);
+            res.status(200);
+            return res.json(service);
         });
     });
 }

@@ -35,6 +35,10 @@ paths:
           description: Success
           schema:
             $ref: "#/definitions/GetPhotoResponse"
+        "304":
+          description: User is not currently present on the service
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         default:
           description: Error
           schema:
@@ -155,6 +159,7 @@ paths:
     get:
       description: Returns all the users to the caller
       operationId: getUsers
+      
       responses:
         "200":
           description: Success
@@ -240,6 +245,17 @@ paths:
     get:
       description: Returns all the services to the caller
       operationId: getServices
+      parameters:
+        - name : gtDate
+          in : query
+          type : string
+          required : false
+          description : Greater than date
+        - name : ltDate
+          in : query
+          type : string
+          required : false
+          description : Lesser than date
       responses:
         "200":
           description: Success

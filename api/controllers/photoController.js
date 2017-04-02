@@ -11,6 +11,8 @@ var mongoose = require('mongoose');
 /* As an example, in normal JavaScript, mistyping a variable name creates a new global variable. 
 In strict mode, this will throw an error, making it impossible to accidentally create a global variable.*/
 var Photo = mongoose.model('Photo'); //don't forget vars
+var Service = mongoose.model('Service');
+var moment = require('moment-timezone');
 
 module.exports = {
   postPhoto: addPhoto,
@@ -22,17 +24,44 @@ module.exports = {
 
 // CREATE (POST)
 function addPhoto(req, res) {
+	var thisMoment = moment();
+    var previousMoment = moment().subtract(1, 'days');
+
     var photo = new Photo(req.body);
 
-	photo.save()
-		.then(savedPhoto => {
-			// console.log("err: "+err); // err makes the code crash derp
+	var query = {
+        "$and" : [
+            {
+                startDateTime : { 
+                    $lt: thisMoment, 
+                    $gt: previousMoment, 
+                },
+            },
+    ]};
+	
+	Service.findOne(query, function (err, service) {
+		if(err) {
+			return handleError(req, res, 500, err);
+		}
 
-			// TODO -> add the photo to a service
-			res.status(201);
-			res.json(savedPhoto);
-		})
-		.fail(err => handleError(req, res, 500, err));
+		photo.save()
+			.then(savedPhoto => {
+				// TODO check userVisited
+				if (contains(service.usersVisited, savedPhoto.firstUserId) === true) {
+					// add the photo to a service
+					service.photos.push(savedPhoto._id);
+					service.save(function (err, service) {
+						res.status(201); // new photo posted
+						return res.json(savedPhoto);
+					});
+				}
+				else {
+					return res.status(304).send("User is not currently present on the service");
+				}
+				
+			})
+			.fail(err => handleError(req, res, 500, err));
+	});
 }
 
 // READ (GET) By Id
@@ -103,4 +132,8 @@ function deletePhotoById(req, res, next) {
 		res.json({success: 1, description: "Photo deleted"});
 	})
 	.fail(err => handleError(req, res, 500, err));
+}
+
+function contains(arr,obj) {
+    return (arr.indexOf(obj) != -1);
 }

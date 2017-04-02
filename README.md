@@ -17,12 +17,16 @@ Wouter:
 + Run on server
 
 TODO:
-- CRUD view
+/ CRUD view
 - Demonstratie voorbereiden
-- APIs met leesbare parameters (ipv object.id)
-- Error handling API
+/ Error handling API
 
 Extra:
 - Externe API's implementeren (Facebook)
 
+----------------------------------------------------------
+FINISH LINE IN-SIGHT (5,5 on Rubric right nao)
 
+TODO:
+- Filtering Collection -> bijv. Service on Date
+- CRUD Geolocation

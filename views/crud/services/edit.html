@@ -1,0 +1,21 @@
+{{> 'crudHeader'}}
+	<div class="container">
+		<form id="form" method="post" action="">
+			<label>* = required</label>
+			<br/>
+			<label>Name* :</label>
+			<input type="text" name="name" id="name" value="{{model.name}}"/>
+			<br/>
+			<label>Description* :</label>
+			<textarea name="description" id="description"">{{model.description}}</textarea>
+			<br/>
+			<label>Start date & time:</label>
+				<input type="datetime-local" data-date-format="mm/dd/yyyy" name="startDateTime" id="startDateTime" value="{{model.startDateTime}}"/>
+			<br/>
+			<label>End date & time:</label>
+				<input type="datetime-local" data-date-format="mm/dd/yyyy" name="endDateTime" id="endDateTime" value="{{model.endDateTime}}"/>
+			<br/>
+			<input type="submit" value="Submit">
+		</form>
+	</div>
+{{> 'crudFooter'}}

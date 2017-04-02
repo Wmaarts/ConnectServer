@@ -1,7 +1,22 @@
 {{> 'crudHeader'}}
 	<div class="container">
-		<form enctype='application/json' method="post" action="/users" name="addUser">
-			<input type="text" name="name" placeholder="insert name here"/>
+		<form id="form" method="post" action="">
+			<label>* = required</label>
+			<br/>
+			<label>Name* :</label>
+			<input type="text" name="name" id="name" placeholder="insert name here"/>
+			<br/>
+			<label>Tel. Nr:</label>
+			<input type="number" name="telNr" id="telNr" placeholder="insert telnr here"/>
+			<br/>
+			<label>Role* :</label>
+			<select name="role" id="role">
+				<option value="user">User</option>
+				<option value="moderator" selected>Moderator</option>
+				<option value="admin">Admin</option>
+			</select>
+			<br/>
+			<input type="submit" value="Submit">
 		</form>
 	</div>
 {{> 'crudFooter'}}

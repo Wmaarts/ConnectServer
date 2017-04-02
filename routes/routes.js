@@ -4,6 +4,7 @@ var roles = new ConnectRoles();
 module.exports = function(app, user, passport) {
 
 	require('./crud/userRoutes')(app, user, passport, '/user');
+	require('./crud/serviceRoutes')(app, user, passport, '/service');
 	
     // HOME PAGE (with login links) ========
     app.get('/', function(req, res) {

@@ -1,0 +1,21 @@
+{{> 'crudHeader'}}
+	<div class="container">
+		<form id="form" method="post" action="">
+			<label>* = required</label>
+			<br/>
+			<label>Name* :</label>
+			<input type="text" name="name" id="name" placeholder="insert name here"/>
+			<br/>
+			<label>Description* :</label>
+			<input type="text" name="description" id="description" placeholder="insert description here"/>
+			<br/>
+			<label>Start date & time:</label>
+				<input type="datetime-local" class="datepicker" data-date-format="mm/dd/yyyy" name="startDateTime" id="startDateTime"></input>
+			<br/>
+			<label>End date & time:</label>
+				<input type="datetime-local" class="datepicker" data-date-format="mm/dd/yyyy" name="endDateTime" id="endDateTime"></input>
+			<br/>
+			<input type="submit" value="Submit">
+		</form>
+	</div>
+{{> 'crudFooter'}}

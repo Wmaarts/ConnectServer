@@ -35,6 +35,10 @@ paths:
           description: Success
           schema:
             $ref: "#/definitions/GetPhotoResponse"
+        "304":
+          description: User is not currently present on the service
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         default:
           description: Error
           schema:

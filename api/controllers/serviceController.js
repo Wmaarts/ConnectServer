@@ -128,13 +128,6 @@ function addUserVisitedById(req, res) {
     });
 }
 
-function contains(a, obj) {
-    console.log("obj: " + obj);
-    for (var i = 0; i < a.length; i++) {
-        console.log("a[i]: "+ a[i]);
-        if (a[i] == obj) {
-            return true;
-        }
-    }
-    return false;
+function contains(arr,obj) {
+    return (arr.indexOf(obj) != -1);
 }

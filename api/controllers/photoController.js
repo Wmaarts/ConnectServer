@@ -25,7 +25,6 @@ module.exports = {
 // CREATE (POST)
 function addPhoto(req, res) {
 	var thisMoment = moment();
-	console.log(thisMoment);
     var previousMoment = moment().subtract(1, 'days');
 
     var photo = new Photo(req.body);
@@ -47,16 +46,19 @@ function addPhoto(req, res) {
 
 		photo.save()
 			.then(savedPhoto => {
-				console.log(service);
-
 				// TODO check userVisited
+				if (contains(service.usersVisited, savedPhoto.firstUserId) === true) {
+					// add the photo to a service
+					service.photos.push(savedPhoto._id);
+					service.save(function (err, service) {
+						res.status(201); // new photo posted
+						return res.json(savedPhoto);
+					});
+				}
+				else {
+					return res.status(304).send("User is not currently present on the service");
+				}
 				
-				// add the photo to a service
-				service.photos.push(savedPhoto._id);
-				service.save(function (err, service) {
-					res.status(201);
-					return res.json(savedPhoto);
-				});
 			})
 			.fail(err => handleError(req, res, 500, err));
 	});
@@ -130,4 +132,8 @@ function deletePhotoById(req, res, next) {
 		res.json({success: 1, description: "Photo deleted"});
 	})
 	.fail(err => handleError(req, res, 500, err));
+}
+
+function contains(arr,obj) {
+    return (arr.indexOf(obj) != -1);
 }

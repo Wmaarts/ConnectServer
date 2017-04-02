@@ -11,6 +11,8 @@ var mongoose = require('mongoose');
 /* As an example, in normal JavaScript, mistyping a variable name creates a new global variable. 
 In strict mode, this will throw an error, making it impossible to accidentally create a global variable.*/
 var Photo = mongoose.model('Photo'); //don't forget vars
+var Service = mongoose.model('Service');
+var moment = require('moment-timezone');
 
 module.exports = {
   postPhoto: addPhoto,
@@ -22,17 +24,42 @@ module.exports = {
 
 // CREATE (POST)
 function addPhoto(req, res) {
+	var thisMoment = moment();
+	console.log(thisMoment);
+    var previousMoment = moment().subtract(1, 'days');
+
     var photo = new Photo(req.body);
 
-	photo.save()
-		.then(savedPhoto => {
-			// console.log("err: "+err); // err makes the code crash derp
+	var query = {
+        "$and" : [
+            {
+                startDateTime : { 
+                    $lt: thisMoment, 
+                    $gt: previousMoment, 
+                },
+            },
+    ]};
+	
+	Service.findOne(query, function (err, service) {
+		if(err) {
+			return handleError(req, res, 500, err);
+		}
 
-			// TODO -> add the photo to a service
-			res.status(201);
-			res.json(savedPhoto);
-		})
-		.fail(err => handleError(req, res, 500, err));
+		photo.save()
+			.then(savedPhoto => {
+				console.log(service);
+
+				// TODO check userVisited
+				
+				// add the photo to a service
+				service.photos.push(savedPhoto._id);
+				service.save(function (err, service) {
+					res.status(201);
+					return res.json(savedPhoto);
+				});
+			})
+			.fail(err => handleError(req, res, 500, err));
+	});
 }
 
 // READ (GET) By Id

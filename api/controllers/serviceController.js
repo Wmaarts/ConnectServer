@@ -105,7 +105,7 @@ function addUserVisitedById(req, res) {
                 },
             },
     ]};
-
+    
     var serviceResult = Service.findOne(query, function(err, service) {
         if (err) {
             res.status(500).send(err); // err handling

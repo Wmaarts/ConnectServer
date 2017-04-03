@@ -28,9 +28,6 @@ function addUser(req, res) {
 }
 
 function getUserList(req, res) {
-	console.log(req.swagger.params.gtDate.value);
-	console.log(req.swagger.params.ltDate.value);
-
 	var query = {};
 	var result = User.find(query).then(data => {
 		return res.json(data);

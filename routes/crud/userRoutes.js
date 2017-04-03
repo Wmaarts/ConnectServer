@@ -54,8 +54,8 @@ module.exports = function(app, user, passport, url) {
     	var userResult = User.findById(query).then(user => { // callback method
     		user.name = req.body.name || user.name;
     		user.role = req.body.role || user.role;
-    		user.telephonenumber = req.body.telephonenumber || user.telephonenumber;
-
+    		user.telephoneNumber = req.body.telephoneNumber || user.telephoneNumber;
+    		
     		// Save user
     		user.save(function (err, user) { // also a javascript callback
     			if (err) {

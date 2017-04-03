@@ -17,12 +17,14 @@ function fillUsers(overwrite){
 		        "password" : "$2a$08$gRWR3zlvyKUHHkNbM9wFf.uTuIorr/FBOFiHcatQ7V8fk6GseNXW6",
 		        "email" : "admin"
 		    },
+		    "telephoneNumber": 0681000001,
 		    "role" : "moderator",
 		    "__v" : 0
 		},
 		{ // just a normal user for testing purposes (Photos)
 		    "_id" : '58da5d2878f01000f84b93ec', 
 			"name": "test",
+			"telephoneNumber": 0681000000,
 		    "role" : "user",
 		    "__v" : 0
 		}

@@ -20,7 +20,7 @@ module.exports = function(app, user, passport) {
     		res.redirect('/crud');
     	}
     	else {
-    		res.render('index.html'); // load the index.html file 
+    		res.render('index.html', {user: req.user}); // load the index.html file 
     	}
     });
     

@@ -6,7 +6,10 @@
 
 var mongoose = require('mongoose');
 var Service = mongoose.model('Service');
+var Geolocation = mongoose.model('Geolocation');
 var moment = require('moment-timezone');
+
+var handleError = require('../helpers/errorhandler')
 
 module.exports = {
     postService: addService,
@@ -19,10 +22,6 @@ module.exports = {
 
 function addService(req, res) {
     var service = new Service(req.body);
-
-    // TODO: Save Geolocation first
-    // Then -> bind the Geolocation._id to the service
-
 	service.save(function (err, service) {
         if (err) {
             return res.status(500).send(err); // error handling
@@ -65,7 +64,52 @@ function getServiceList(req, res) {
 
     // Actual search using built query
     var result = Service.find(query, function(err, serviceList) {
-		return res.json(serviceList);
+        if (err) { //err handling
+            return handleError(req, res, 500, err);
+        }
+
+        var serviceListClone = [];
+
+        var itemsProcessed = 0;
+
+        function geoCloneCallback() {
+            return res.json(serviceListClone);
+        };
+
+        // Adding Geolocations to the Services
+        serviceList.forEach(function(service, index, array) {
+            var serviceClone = {};
+
+            serviceClone._id = service._id;
+            serviceClone.name = service.name;
+            serviceClone.description = service.description;
+            serviceClone.startDateTime = service.startDateTime;
+            serviceClone.endDateTime = service.endDateTime;
+            serviceClone.usersVisited = service.usersVisited;
+            serviceClone.photos = service.photos;
+
+            var geolocationQuery = {
+                _id : service.geolocation,
+            };
+
+            var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
+                if (err) {
+                    console.log(err); // error handling uhm
+                }
+
+                // Put the Geolocation inside service object
+                serviceClone.geolocation = geolocation;
+                serviceListClone.push(serviceClone);
+
+                itemsProcessed++;
+                if (itemsProcessed === array.length) {
+                    geoCloneCallback();
+                }
+            });
+
+        });
+
+        
     });
 }
 

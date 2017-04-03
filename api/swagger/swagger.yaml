@@ -358,7 +358,7 @@ definitions:
       name:
         type: string
       telephoneNumber:
-        type: number
+        type: string
       photoString:
         type: string
     required:

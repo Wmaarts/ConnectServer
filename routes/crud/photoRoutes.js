@@ -16,9 +16,9 @@ module.exports = function(app, user, passport, url) {
     	var query = {};
     	query._id = req.params.id;
 
-    	var userResult = User.findByIdAndRemove(query);
+    	var photoResult = Photo.findByIdAndRemove(query);
 
-    	userResult.then(data => {
+    	photoResult.then(data => {
     		res.redirect(url);
     	})
     	.fail(err => res.render('crud/photos/index.html', {err: err}));

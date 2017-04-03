@@ -37,7 +37,29 @@ function getServiceCurrentlyRunning(req, res) {
             return handleError(req, res, 500, err);
         }
 
-        return res.json(service);
+        var serviceClone = {};
+
+        serviceClone._id = service._id;
+        serviceClone.name = service.name;
+        serviceClone.description = service.description;
+        serviceClone.startDateTime = service.startDateTime;
+        serviceClone.endDateTime = service.endDateTime;
+        serviceClone.usersVisited = service.usersVisited;
+        serviceClone.photos = service.photos;
+
+        var geolocationQuery = {
+            _id : service.geolocation,
+        };
+
+        var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
+            if (err) {
+                return handleError(req, res, 500, err); // error handling uhm
+            }
+
+            // Put the Geolocation inside service object
+            serviceClone.geolocation = geolocation;
+            return res.json(serviceClone);
+        });
     });
 }
 
@@ -49,7 +71,30 @@ function getServiceById(req, res) {
         if (err) {
             return handleError(req, res, 500, err);
         }
-        return res.json(service);
+
+        var serviceClone = {};
+
+        serviceClone._id = service._id;
+        serviceClone.name = service.name;
+        serviceClone.description = service.description;
+        serviceClone.startDateTime = service.startDateTime;
+        serviceClone.endDateTime = service.endDateTime;
+        serviceClone.usersVisited = service.usersVisited;
+        serviceClone.photos = service.photos;
+
+        var geolocationQuery = {
+            _id : service.geolocation,
+        };
+
+        var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
+            if (err) {
+                return handleError(req, res, 500, err); // error handling uhm
+            }
+
+            // Put the Geolocation inside service object
+            serviceClone.geolocation = geolocation;
+            return res.json(serviceClone);
+        });
     });
 }
 
@@ -105,7 +150,7 @@ function getServiceList(req, res) {
 
             var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
                 if (err) {
-                    console.log(err); // error handling uhm
+                    return handleError(req, res, 500, err); // error handling uhm
                 }
 
                 // Put the Geolocation inside service object

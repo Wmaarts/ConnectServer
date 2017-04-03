@@ -12,10 +12,34 @@ var moment = require('moment-timezone');
 var handleError = require('../helpers/errorhandler')
 
 module.exports = {
+    getCurrentService: getServiceCurrentlyRunning,
     getService: getServiceById,
     getServices: getServiceList,
     postUserOnSite: addUserVisitedById,
 };
+
+function getServiceCurrentlyRunning(req, res) {
+    var thisMoment = moment();
+    var previousMoment = moment().subtract(1, 'days');
+
+	var query = {
+        "$and" : [
+            {
+                startDateTime : {
+                    $lt: thisMoment, 
+                    $gt: previousMoment, 
+                },
+            },
+    ]};
+
+    Service.findOne(query, function (err, service) {
+        if(err) {
+            return handleError(req, res, 500, err);
+        }
+
+        return res.json(service);
+    });
+}
 
 function getServiceById(req, res) {
     var query = {};

@@ -4,7 +4,7 @@
  https://www.w3schools.com/js/js_strict.asp
 */
 
-var handleError = require('../helpers/errorhandler'); //TODO error handling
+var handleError = require('../helpers/errorhandler'); //error handling
 
 var mongoose = require('mongoose');
 

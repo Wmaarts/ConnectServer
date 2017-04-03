@@ -12,23 +12,10 @@ var moment = require('moment-timezone');
 var handleError = require('../helpers/errorhandler')
 
 module.exports = {
-    postService: addService,
     getService: getServiceById,
     getServices: getServiceList,
-    putService: updateServiceById,
-    deleteService: deleteServiceById,
     postUserOnSite: addUserVisitedById,
 };
-
-function addService(req, res) {
-    var service = new Service(req.body);
-	service.save(function (err, service) {
-        if (err) {
-            return res.status(500).send(err); // error handling
-        }
-        return res.json({success: 1, description: "Service posted"});
-    });
-}
 
 function getServiceById(req, res) {
     var query = {};
@@ -36,9 +23,9 @@ function getServiceById(req, res) {
 
 	var serviceResult = Service.findById(query, function (err, service) {
         if (err) {
-            res.status(500).send(err); // err handling
+            return handleError(req, res, 500, err);
         }
-        res.json(service);
+        return res.json(service);
     });
 }
 
@@ -72,7 +59,7 @@ function getServiceList(req, res) {
 
         var itemsProcessed = 0;
 
-        function geoCloneCallback() {
+        function serviceJsonCallback() {
             return res.json(serviceListClone);
         };
 
@@ -103,55 +90,10 @@ function getServiceList(req, res) {
 
                 itemsProcessed++;
                 if (itemsProcessed === array.length) {
-                    geoCloneCallback();
+                    serviceJsonCallback();
                 }
             });
-
         });
-
-        
-    });
-}
-
-function updateServiceById(req, res) {
-    var query = {};
-	query._id = req.swagger.params.id.value;
-
-	var serviceResult = Service.findById(query, function (err, service) {
-        if (err) {
-            return res.status(500).send(err); // err handling
-        }
-
-        service.name = req.body.name || service.name;
-        service.startDateTime = req.body.startDateTime || service.startDateTime;
-        service.endDateTime = req.body.endDateTime || service.endDateTime;
-        service.description = req.body.description || service.description;
-        
-        // This probably works? I just don't know. It works if it exists, probs
-        service.geolocation = req.body.geolocation || service.geolocation;
-
-
-        service.usersVisited = req.body.usersVisited || service.usersVisited;
-        service.photos = req.body.photos || service.photos;
-        
-        service.save(function(err, service) {
-            if (err) {
-                return res.status(500).send(err); // err handling
-            }
-            return res.json(service);
-        });
-    });
-}
-    
-function deleteServiceById(req, res) {
-    var query = {};
-    query._id = req.swagger.params.id.value;
-
-    var serviceResult = Service.findByIdAndRemove(query, function(err, service) {
-        if (err) {
-            res.status(500).send(err);
-        }
-        res.json({success: 1, description: "Service deleted"});
     });
 }
 
@@ -171,8 +113,7 @@ function addUserVisitedById(req, res) {
     
     var serviceResult = Service.findOne(query, function(err, service) {
         if (err) {
-            res.status(500).send(err); // err handling
-            return res.json({});
+            return handleError(req, res, 500, err);
         }
 
         if (contains(service.usersVisited, req.body._id) === false) {

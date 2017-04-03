@@ -13,16 +13,14 @@ module.exports = {
   	getUsers: getUserList,
 	getUser: getUserById,
 	putUser: updateUserById,
-	deleteUser: deleteUserById,
 };
-
 
 function addUser(req, res) {
 	var user = new User(req.body);
 
 	user.save().then(savedUser => {
-		res.status(201);
-		res.json(savedUser);
+			res.status(201);
+			return res.json(savedUser);
 		})
 	.fail(err => handleError(req, res, 500, err));
 }
@@ -45,7 +43,7 @@ function getUserById(req, res) {
 		if(data == null){
 			return handleError(req, res, 404, "Not found");
 		}
-		res.json(data);
+		return res.json(data);
 	})
 	.fail(err => handleError(req, res, 500, err));
 }
@@ -68,21 +66,8 @@ function updateUserById(req, res) {
 				return res.status(500).send(err); // error handling
 			}
 			res.status(200);
-			res.json(user);
+			return res.json(user);
 		});
-	})
-	.fail(err => handleError(req, res, 500, err));
-}
-
-function deleteUserById(req, res) {
-	var query = {};
-
-	query._id = req.swagger.params.id.value; //note _id -> query has to search on the correct name, no misspellings
-
-	var userResult = User.findByIdAndRemove(query);
-
-	userResult.then(data => {
-		res.json({success: 1, description: "User deleted"});
 	})
 	.fail(err => handleError(req, res, 500, err));
 }

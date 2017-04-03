@@ -10,7 +10,6 @@
                     <p>
                         <strong>email</strong>: {{user.local.email}}<br>
                     </p>
-                    <a href="/unlink/local" class="btn btn-default">Unlink</a>
                 {{else}}
                     <a href="/connect/local" class="btn btn-default">Connect Local</a>
                 {{/if}}
@@ -29,7 +28,6 @@
                         <strong>email</strong>: {{ user.facebook.email }}<br>
                         <strong>name</strong>: {{ user.facebook.name }}<br>
                     </p>
-                    <a href="/unlink/facebook" class="btn btn-primary">Unlink</a>
                 {{else}}
                     <a href="/connect/facebook" class="btn btn-primary">Connect Facebook</a>
                 {{/if}}
@@ -50,7 +48,6 @@
                         <strong>email</strong>: {{ user.google.email }}<br>
                         <strong>name</strong>: {{ user.google.name }}
                     </p>
-                    <a href="/unlink/google" class="btn btn-danger">Unlink</a>
                 {{else}}
                     <a href="/connect/google" class="btn btn-danger">Connect Google</a>
                 {{/if}}

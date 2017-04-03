@@ -41,7 +41,11 @@ require('./api/models/service');
 require('./api/models/geolocation');
 
 // Fill Testdata
-require('./api/helpers/fillTestData')();
+if (process.env.NODE_ENV == "production") {
+	require('./api/helpers/fillTestData')(false);
+} else{
+	require('./api/helpers/fillTestData')(true);
+}
 
 // Routes
 // app.use('/users', require('./api/routes/users')(handleError));

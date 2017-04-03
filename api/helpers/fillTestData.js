@@ -177,8 +177,7 @@ function fillPhotos(overwrite){
 		});
 };
 
-module.exports = function() {
-	var overwrite = true;
+module.exports = function(overwrite) {
 	q.fcall(fillUsers(overwrite))
 		.then(fillGeolocations(overwrite))
 		.then(fillServices(overwrite))

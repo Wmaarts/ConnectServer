@@ -68,7 +68,7 @@ module.exports = function(app, user, passport) {
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
     app.get('/profile', user.can('access CRUD'), isLoggedIn, function(req, res) {
-        res.render('profile.html', {
+        res.render('crud/profile.html', {
             user : req.user // get the user out of session and pass to template
         });
     });

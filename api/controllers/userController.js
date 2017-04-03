@@ -21,10 +21,10 @@ function addUser(req, res) {
 	var user = new User(req.body);
 
 	user.save().then(savedUser => {
-			res.status(201);
-			res.json(savedUser);
+		res.status(201);
+		res.json(savedUser);
 		})
-		.fail(err => handleError(req, res, 500, err));
+	.fail(err => handleError(req, res, 500, err));
 }
 
 function getUserList(req, res) {

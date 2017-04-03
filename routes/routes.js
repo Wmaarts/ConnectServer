@@ -5,6 +5,14 @@ module.exports = function(app, user, passport) {
 
 	require('./crud/userRoutes')(app, user, passport, '/user');
 	require('./crud/serviceRoutes')(app, user, passport, '/service');
+	require('./crud/photoRoutes')(app, user, passport, '/photo');
+	require('./crud/geolocationRoutes')(app, user, passport, '/geolocation');
+	
+	// Swagger documentation page
+	app.get('/api-docs', function(req, res) {
+    	res.render('documentation/index.html'); 
+	});
+	
 	
     // HOME PAGE (with login links) ========
     app.get('/', function(req, res) {

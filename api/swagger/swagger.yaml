@@ -270,7 +270,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /services/getCurrentService:
+  /services/currentService:
     x-swagger-router-controller: serviceController
     get:
       description: Get service that is currently running

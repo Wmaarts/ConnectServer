@@ -25,14 +25,14 @@ module.exports = {
 // CREATE (POST)
 function addPhoto(req, res) {
 	var thisMoment = moment();
-    var previousMoment = moment().subtract(1, 'days');
+    var previousMoment = moment().subtract(1, 'days'); // THIS DOES NOT MAKE SENSE TODO
 
     var photo = new Photo(req.body);
 
 	var query = {
         "$and" : [
             {
-                startDateTime : { 
+                startDateTime : {  //TODO this query
                     $lt: thisMoment, 
                     $gt: previousMoment, 
                 },

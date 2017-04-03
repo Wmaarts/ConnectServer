@@ -335,6 +335,8 @@ definitions:
   User:
     type: object
     properties:
+      _id:
+        type: string
       role:
         type: string
       name:
@@ -366,6 +368,7 @@ definitions:
   Service:
     type: object
     properties:
+      
       name:
         type: string
       startDateTime:

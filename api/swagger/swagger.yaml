@@ -3,8 +3,8 @@ info:
   version: "1.0.0"
   title: Connect Api
 #
-host: localhost:10010 # dev
-# host: connect-ku.herokuapp.com # prod
+# host: localhost:10010 # dev
+host: connect-ku.herokuapp.com # prod
 #
 # basePath prefixes all resource paths 
 # basePath: /

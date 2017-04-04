@@ -51,21 +51,23 @@ function getServiceCurrentlyRunning(req, res) {
         serviceClone.usersVisited = service.usersVisited;
         serviceClone.photos = service.photos;
 
-        var geolocationQuery = {
-            _id : service.geolocation,
-        };
+        if(service.geolocation) {
+            var geolocationQuery = {
+                _id : service.geolocation,
+            };
 
-        var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
-            if (err) {
-                return handleError(req, res, 500, err); // error handling uhm
-            }
+            var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
+                if (err) {
+                    return handleError(req, res, 500, err); // error handling uhm
+                }
 
-            if(geolocation) {
-                // Put the Geolocation inside service object
-                serviceClone.geolocation = geolocation;
-            }
-            return res.json(serviceClone);
-        });
+                if(geolocation) {
+                    // Put the Geolocation inside service object
+                    serviceClone.geolocation = geolocation;
+                }
+                return res.json(serviceClone);
+            });
+        }
     });
 }
 
@@ -92,21 +94,26 @@ function getServiceById(req, res) {
         serviceClone.usersVisited = service.usersVisited;
         serviceClone.photos = service.photos;
 
-        var geolocationQuery = {
-            _id : service.geolocation,
-        };
+        if(service.geolocation) {
+            var geolocationQuery = {
+                _id : service.geolocation,
+            };
 
-        var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
-            if (err) {
-                return handleError(req, res, 500, err); // error handling uhm
-            }
+            var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
+                if (err) {
+                    return handleError(req, res, 500, err); // error handling uhm
+                }
 
-            if(geolocation) {
-                // Put the Geolocation inside service object
-                serviceClone.geolocation = geolocation;
-            }
+                if(geolocation) {
+                    // Put the Geolocation inside service object
+                    serviceClone.geolocation = geolocation;
+                }
+                return res.json(serviceClone);
+            });
+        }
+        else {
             return res.json(serviceClone);
-        });
+        }
     });
 }
 
@@ -160,27 +167,37 @@ function getServiceList(req, res) {
             serviceClone.usersVisited = service.usersVisited;
             serviceClone.photos = service.photos;
 
-            var geolocationQuery = {
-                _id : service.geolocation,
-            };
 
-            var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
-                if (err) {
-                    return handleError(req, res, 500, err); // error handling uhm
-                }
+            if(service.geolocation) {
+                var geolocationQuery = {
+                    _id : service.geolocation,
+                };
+                var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
+                    if (err) {
+                        return handleError(req, res, 500, err); // error handling uhm
+                    }
 
-                if(geolocation) {
-                    // Put the Geolocation inside service object
-                    serviceClone.geolocation = geolocation;
-                }
-                serviceListClone.push(serviceClone);
+                    if(geolocation) { // Just in case, eh.
+                        // Put the Geolocation inside service object
+                        serviceClone.geolocation = geolocation;
+                    }
+                    serviceListClone.push(serviceClone);
 
-                // Send Json when the last geolocation callback has been made
+                    // Send Json when the last geolocation callback has been made
+                    itemsProcessed++;
+                    if (itemsProcessed === array.length) {
+                        serviceJsonCallback();
+                    }
+                });
+
+            }
+            else {
                 itemsProcessed++;
                 if (itemsProcessed === array.length) {
                     serviceJsonCallback();
                 }
-            });
+            }
+
         });
     });
 }

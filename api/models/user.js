@@ -6,7 +6,7 @@ console.log('Initializing user schema');
 var roles = ['user', 'moderator', 'admin']
 
 var userSchema = new mongoose.Schema({
-	telephoneNumber: {type: String, unique: true},
+	telephoneNumber: {type: String},
 	role: {type: String, required: true, enum: roles, unique: false, default: "user"},
 	photoString: {type: String},
 	name: {type: String},

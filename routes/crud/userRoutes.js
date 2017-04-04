@@ -4,7 +4,7 @@ var roles = new ConnectRoles();
 module.exports = function(app, user, passport, url) {
 
 	// INDEX 
-    app.get(url, user.can('access CRUD'), function(req, res) {
+    app.get(url, user.can(''), function(req, res) {
     	var result = User.find({}).then(data => {
     		res.render('crud/users/index.html', {users: data}); 
     	})
@@ -13,12 +13,12 @@ module.exports = function(app, user, passport, url) {
 	
 	// CREATE
     // Get
-    app.get(url + '/create', user.can('access CRUD'), function(req, res) {
+    app.get(url + '/create', user.can(''), function(req, res) {
         res.render('crud/users/create.html'); 
     });
     
     // Post
-    app.post(url + '/create', user.can('access CRUD'), function(req, res) {
+    app.post(url + '/create', user.can(''), function(req, res) {
     	var user = new User(req.body);
     	
     	user.save().then(savedUser => {
@@ -29,7 +29,7 @@ module.exports = function(app, user, passport, url) {
 
     // UPDATE
     // Get
-    app.get(url + '/edit/:id', user.can('access CRUD'), function(req, res) {
+    app.get(url + '/edit/:id', user.can(''), function(req, res) {
 		var query = {};
 
 		//req.swagger contains the path parameters
@@ -45,7 +45,7 @@ module.exports = function(app, user, passport, url) {
     });
     
     // Post
-    app.post(url + '/edit/:id', user.can('access CRUD'), function(req, res) {
+    app.post(url + '/edit/:id', user.can(''), function(req, res) {
     	var query = {};
 
     	//req.swagger contains the path parameters
@@ -68,7 +68,7 @@ module.exports = function(app, user, passport, url) {
     });
 
     // DELETE
-    app.get(url + '/delete/:id', user.can('access CRUD'), function(req, res) {
+    app.get(url + '/delete/:id', user.can(''), function(req, res) {
     	var query = {};
     	query._id = req.params.id;
 

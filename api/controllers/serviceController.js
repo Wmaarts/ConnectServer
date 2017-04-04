@@ -105,7 +105,7 @@ function getServiceList(req, res) {
 
             var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
                 if (err) {
-                    console.log(err); // error handling uhm
+                    console.log(err);
                 }
 
                 // Put the Geolocation inside service object

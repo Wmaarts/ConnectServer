@@ -3,8 +3,8 @@ info:
   version: "1.0.0"
   title: Connect Api
 #
-# host: localhost:10010 # dev
-host: connect-ku.herokuapp.com # prod
+host: localhost:10010 # dev
+# host: connect-ku.herokuapp.com # prod
 #
 # basePath prefixes all resource paths 
 # basePath: /
@@ -173,6 +173,28 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
+  /users/match/{userId}:
+    x-swagger-router-controller: userController
+    get:
+      description: Returns a random user at the current event to the caller
+      operationId: getUserMatch
+      parameters:
+        - name: userId
+          type: string
+          in: path
+          required: true
+      
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/GetUserResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
   /users/{id}:
     x-swagger-router-controller: userController
     get:

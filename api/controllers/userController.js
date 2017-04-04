@@ -49,6 +49,7 @@ function matchUser(req, res){
         var rand = Math.floor((Math.random() * service.usersVisited.length) + 0);
         var selectedMatch = service.usersVisited[rand]
         while(selectedMatch == req.swagger.params.id.value){
+        	console.log(" selectedMatch = " + selectedMatch);
         	selectedMatch = service.usersVisited[Math.floor((Math.random() * service.usersVisited.length) + 0)]
         }
         
@@ -68,7 +69,6 @@ function matchUser(req, res){
     	})
     	.fail(err => handleError(req, res, 500, err));
     });
-    handleError(req, res, 500, "??");
 }
 
 function addUser(req, res) {

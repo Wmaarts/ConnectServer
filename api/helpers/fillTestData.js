@@ -5,7 +5,6 @@ User = mongoose.model('User');
 Geolocation = mongoose.model('Geolocation');
 Service = mongoose.model('Service');
 Photo = mongoose.model('Photo');
-// var moment = require('moment');
 var moment = require('moment-timezone');
 
 
@@ -18,7 +17,7 @@ function fillUsers(overwrite){
 		        "email" : "admin"
 		    },
 		    "telephoneNumber": 0681000001,
-		    "role" : "moderator",
+		    "role" : "admin",
 		    "__v" : 0
 		},
 		{ // just a normal user for testing purposes (Photos)
@@ -26,6 +25,15 @@ function fillUsers(overwrite){
 			"name": "test",
 			"telephoneNumber": 0681000000,
 		    "role" : "user",
+		    "__v" : 0
+		},
+		{
+		    "_id" : "58e360036c78a407805c896d",
+		    "local" : {
+		        "password" : "$2a$08$Ewt9Ky7nT5mXsHf4TJop8.ss3Hj12SEgFrMLEQ5rPmj4T6ZeOP0IO",
+		        "email" : "mod"
+		    },
+		    "role" : "moderator",
 		    "__v" : 0
 		}
 	];

@@ -7,7 +7,7 @@ module.exports = function(app, user, passport, url) {
 	// INDEX 
     app.get(url, user.can('access CRUD'), function(req, res) {
     	var result = Service.find({}).then(data => {
-    		res.render('crud/services/index.html', {services: data}); 
+    		res.render('crud/services/index.html', {services: data});
     	})
     	.fail(err => res.render('crud/services/index.html', {err: err}));
     });

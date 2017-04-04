@@ -10,7 +10,8 @@ require('../api/models/photo');
 require('../api/models/user');
 require('../api/models/service');
 require('../api/models/geolocation');
-require('../api/helpers/fillTestData')();
+require('../api/helpers/fillTestData')(true);
+	
 var userController = require('../api/controllers/userController');
 
 var SwaggerExpress = require('swagger-express-mw');
@@ -25,6 +26,7 @@ SwaggerExpress.create({ appRoot: __dirname + '/../' }, function(err, swaggerExpr
 	  var server = app.listen(port);
 });
 
+
 function makeRequest(route, statusCode, done){
 	request(app)
 		.get(route)
@@ -34,9 +36,18 @@ function makeRequest(route, statusCode, done){
 
 			done(null, res);
 		});
-};
+}
 
-describe('Testing user routes', function(){
+describe('Empty test: ', function(){
+	it('should always pass', function(done){
+		makeRequest('/users', 200, function(err, res){
+			if(err){ return done(err); }
+			done();
+		});
+	})
+});
+
+describe('Testing user GET routes', function(){
 	describe('without params', function(){
 		it('should return all users', function(done){
 			makeRequest('/users', 200, function(err, res){
@@ -44,7 +55,7 @@ describe('Testing user routes', function(){
 				
 				expect(res.body[0]._id).to.equal("58d52617e1b7270dc4714358");
 				expect(res.body[1]._id).to.equal("58da5d2878f01000f84b93ec");
-				expect(res.body.length).to.equal(2);
+				expect(res.body.length).to.equal(3);
 				done();
 			});
 		});
@@ -55,7 +66,7 @@ describe('Testing user routes', function(){
 			makeRequest('/users/58d52617e1b7270dc4714358', 200, function(err, res){
 				if(err){return done(err)}
 				
-				expect(res.body.role).to.equal("moderator");
+				expect(res.body.role).to.equal("admin");
 				done();
 			});
 		});
@@ -64,7 +75,9 @@ describe('Testing user routes', function(){
 			makeRequest('/users/58d52617e1b7270dc4714357', 404, done);
 		});
 	});
+});
 
+describe('Testing user POST route', function(){
 	describe(': creating a new one', function(){
 		it('should return the new one', function(done){
 			request(app)
@@ -80,4 +93,3 @@ describe('Testing user routes', function(){
 		});
 	});
 });
-

@@ -170,7 +170,6 @@ function getServiceList(req, res) {
             serviceClone.usersVisited = service.usersVisited;
             serviceClone.photos = service.photos;
 
-
             if(service.geolocation) {
                 var geolocationQuery = {
                     _id : service.geolocation,

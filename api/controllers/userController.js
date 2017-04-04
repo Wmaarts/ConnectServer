@@ -54,7 +54,7 @@ function matchUser(req, res){
         var secondQuery = {};
         secondQuery._id = selectedMatch
     	
-        console.log(selectedMatch);
+        console.log("Selected match: "  + selectedMatch);
         console.log(selectedMatch);
 
     	var userResult = User.findById(secondQuery).then(data => {

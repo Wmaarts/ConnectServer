@@ -22,15 +22,8 @@
 			<label>End date & time:</label>
 				<input type="datetime-local" name="endDateTime" id="endDateTime" value="{{model.endDateTime}}"/>
 			<br/>
-			<label>Timezone</label>
-				<input type="text" id="timezone" name="timezone"</input>
-			<br/>
+				<input hidden type="text" id="timezone" name="timezone" value="+00:00"></input>
 			<input type="submit" value="Submit">
 		</form>
 	</div>
-<script src="/moment.js"></script>	
-<script>
-	var timezone = moment.parseZone(moment().format()).format('Z');
-	document.getElementById("timezone").value = timezone;
-</script>
 {{> 'crudFooter'}}

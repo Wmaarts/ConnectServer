@@ -64,7 +64,7 @@ module.exports = function(app, user, passport, url) {
 				data.startDateTime = moment(data.startDateTime).format('YYYY-MM-DDThh:mm').toString();
 				data.endDateTime = moment(data.endDateTime).format('YYYY-MM-DDThh:mm').toString();
 
-				res.render('crud/services/edit.html', { model: data, geolocationArray: geolocations }); 
+				res.render('crud/services/edit.html', { model: data, geolocationArray: geolocations, timezone: "+0" }); 
 			})
 			.fail(err => res.render('crud/services/index.html', {err: err}));
 		});

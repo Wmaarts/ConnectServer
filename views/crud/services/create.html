@@ -15,7 +15,15 @@
 			<label>End date & time:</label>
 				<input type="datetime-local" class="datepicker" data-date-format="mm/dd/yyyy" name="endDateTime" id="endDateTime"></input>
 			<br/>
+			<label>Timezone</label>
+				<input type="text" id="timezone" name="timezone"</input>
+			<br/>
 			<input type="submit" value="Submit">
 		</form>
 	</div>
+<script src="/moment.js"></script>	
+<script>
+	var timezone = moment.parseZone(moment().format()).format('Z');
+	document.getElementById("timezone").value = timezone;
+</script>
 {{> 'crudFooter'}}

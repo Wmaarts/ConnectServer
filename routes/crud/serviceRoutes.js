@@ -20,7 +20,13 @@ module.exports = function(app, user, passport, url) {
     
     // Post
     app.post(url + '/create', user.can('access CRUD'), function(req, res) {
-    	var service = new Service(req.body);
+		var body = {};
+		body.name = req.body.name;
+		body.description = req.body.description;
+		body.startDateTime = req.body.startDateTime + req.body.timezone;
+		body.endDateTime = req.body.endDateTime + req.body.timezone;
+
+    	var service = new Service(body);
     	
     	service.save().then(savedService => {
     		res.redirect(url);
@@ -70,8 +76,8 @@ module.exports = function(app, user, passport, url) {
             }
 
             service.name = req.body.name || service.name;
-            service.startDateTime = req.body.startDateTime || service.startDateTime;
-            service.endDateTime = req.body.endDateTime || service.endDateTime;
+            service.startDateTime = req.body.startDateTime + req.body.timezone || service.startDateTime;
+            service.endDateTime = req.body.endDateTime + req.body.timezone || service.endDateTime;
             service.description = req.body.description || service.description;
             service.geolocation = req.body.geolocation || service.geolocation;
             

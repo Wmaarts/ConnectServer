@@ -48,7 +48,7 @@ function matchUser(req, res){
         // Select a random user that is not you!
         var rand = Math.floor((Math.random() * service.usersVisited.length) + 0);
         var selectedMatch = service.usersVisited[rand]
-        while(selectedMatch != req.swagger.params.id.value){
+        while(selectedMatch == req.swagger.params.id.value){
         	selectedMatch = service.usersVisited[Math.floor((Math.random() * service.usersVisited.length) + 0)]
         }
         
@@ -58,8 +58,10 @@ function matchUser(req, res){
         console.log("Selected match: "  + selectedMatch);
         console.log(selectedMatch);
 
-    	var userResult = User.findById(secondQuery).then(data => {
-    		if(data == null){return handleError(req, res, 500, "This user must exist");}
+    	User.findById(secondQuery).then(data => {
+    		if(data == undefined){
+    			return handleError(req, res, 500, "This user must exist");
+    		}
     		console.log("Json return: ");
     		console.log(data);
     		return res.json(data);

@@ -39,8 +39,6 @@ function matchUser(req, res){
         if(service == null || service.usersVisited == undefined || 
         		service.usersVisited.length <= 1) //With only 1 user at the service it's hard to find a match. =)
         { 
-        	console.log("No content. Usersvisited: ");
-        	console.log(service.usersVisited);
         	res.status(204);
         	return res.json("No content");
         }

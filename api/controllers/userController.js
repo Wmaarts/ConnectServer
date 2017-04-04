@@ -36,8 +36,9 @@ function matchUser(req, res){
     Service.findOne(query, function (err, service) {
         if(err) {return handleError(req, res, 500, err);}
         
-        // With only 1 user at the service it's hard to find a match. =)
-        if(service.usersVisited == undefined || service.usersVisited.length <= 1){
+        if(service == undefined || service.usersVisited == undefined || 
+        		service.usersVisited.length <= 1) //With only 1 user at the service it's hard to find a match. =)
+        { 
         	console.log("No content. Usersvisited: ");
         	console.log(service.usersVisited);
         	res.status(204);

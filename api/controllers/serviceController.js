@@ -68,6 +68,9 @@ function getServiceCurrentlyRunning(req, res) {
                 return res.json(serviceClone);
             });
         }
+        else {
+            return res.json(serviceClone);
+        }
     });
 }
 
@@ -189,9 +192,9 @@ function getServiceList(req, res) {
                         serviceJsonCallback();
                     }
                 });
-
             }
             else {
+                serviceListClone.push(serviceClone);
                 itemsProcessed++;
                 if (itemsProcessed === array.length) {
                     serviceJsonCallback();

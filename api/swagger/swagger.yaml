@@ -11,7 +11,7 @@ host: connect-ku.herokuapp.com # prod
 # 
 schemes:
   # tip: remove http to make production-grade
-  - http
+  # - http
   - https
 # format of bodies a client can send (Content-Type)
 consumes:
@@ -174,28 +174,6 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /users/match/{userId}:
-    x-swagger-router-controller: userController
-    get:
-      description: Returns a random user at the current event to the caller
-      operationId: getUserMatch
-      parameters:
-        - name: userId
-          type: string
-          in: path
-          required: true
-      
-      responses:
-        "200":
-          description: Success
-          schema:
-            $ref: "#/definitions/GetUserResponse"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-  
   /users/{id}:
     x-swagger-router-controller: userController
     get:

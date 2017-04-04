@@ -60,8 +60,10 @@ function getServiceCurrentlyRunning(req, res) {
                 return handleError(req, res, 500, err); // error handling uhm
             }
 
-            // Put the Geolocation inside service object
-            serviceClone.geolocation = geolocation;
+            if(geolocation) {
+                // Put the Geolocation inside service object
+                serviceClone.geolocation = geolocation;
+            }
             return res.json(serviceClone);
         });
     });
@@ -99,8 +101,10 @@ function getServiceById(req, res) {
                 return handleError(req, res, 500, err); // error handling uhm
             }
 
-            // Put the Geolocation inside service object
-            serviceClone.geolocation = geolocation;
+            if(geolocation) {
+                // Put the Geolocation inside service object
+                serviceClone.geolocation = geolocation;
+            }
             return res.json(serviceClone);
         });
     });
@@ -165,10 +169,13 @@ function getServiceList(req, res) {
                     return handleError(req, res, 500, err); // error handling uhm
                 }
 
-                // Put the Geolocation inside service object
-                serviceClone.geolocation = geolocation;
+                if(geolocation) {
+                    // Put the Geolocation inside service object
+                    serviceClone.geolocation = geolocation;
+                }
                 serviceListClone.push(serviceClone);
 
+                // Send Json when the last geolocation callback has been made
                 itemsProcessed++;
                 if (itemsProcessed === array.length) {
                     serviceJsonCallback();

@@ -66,6 +66,7 @@ function matchUser(req, res){
     	})
     	.fail(err => handleError(req, res, 500, err));
     });
+    handleError(req, res, 500, "??");
 }
 
 function addUser(req, res) {

@@ -109,15 +109,14 @@ function fillGeolocations(overwrite) {
 		{
 			"_id" : "58de221418c06e4cccd7f3df",
 			"name" : "Connect Revius Wijk Lyceum",
-			"longitude" : 51.982319,
-			"latitude" : 5.338590,
+			"latitude" : 51.982319,
+			"longitude" : 5.338590,
 		},
 		{
 			"_id" : "58de221418c06e4cccd7f3e0",
 			"name" : "Avans Hogeschool 's-Hertogenbosch",
-			"longitude" : 51.688705,
-			"latitude": 5.287003,
-			
+			"latitude": 51.688705,
+			"longitude" : 5.287003,
 		},
 	];
 

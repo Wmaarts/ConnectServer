@@ -173,6 +173,26 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
+  /users/match/{id}:
+    x-swagger-router-controller: userController
+    get:
+      description: Match a user to another
+      operationId: getUserMatch
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/GetUserResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
   /users/{id}:
     x-swagger-router-controller: userController
     get:

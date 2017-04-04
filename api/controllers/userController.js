@@ -48,7 +48,7 @@ function matchUser(req, res){
         // Select a random user that is not you!
         var rand = Math.floor((Math.random() * service.usersVisited.length) + 0);
         var selectedMatch = service.usersVisited[rand]
-        while(selectedMatch != req.swagger.params.userId.value){
+        while(selectedMatch != req.swagger.params.id.value){
         	selectedMatch = service.usersVisited[Math.floor((Math.random() * service.usersVisited.length) + 0)]
         }
         

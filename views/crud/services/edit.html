@@ -9,6 +9,13 @@
 			<label>Description* :</label>
 			<textarea name="description" id="description">{{model.description}}</textarea>
 			<br/>
+			<label>Geolocations :</label>
+			<select name="geolocation">
+				{{#each geolocationArray}}
+					<option value="{{_id}}">{{name}}</option>
+				{{/each}}
+			</select>
+			<br/>
 			<label>Start date & time:</label>
 				<input type="datetime-local" name="startDateTime" id="startDateTime" value="{{model.startDateTime}}"/>
 			<br/>

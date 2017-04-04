@@ -6,6 +6,7 @@
             <th data-field="name">Name</th>
             <th data-field="startTime">Start time:</th>
             <th data-field="endTime">End time:</th>
+						<th data-field="geolocation">Geolocation:</th>
             <th/>
             <th/>
         </tr>
@@ -16,6 +17,7 @@
 			  <td>{{this.name}}</td>
 			  <td>{{this.startDateTime}}</td>
 			  <td>{{this.endDateTime}}</td>
+				<td><a href="/geolocation/edit/{{this.geolocation}}">{{this.geolocation}}</a></td>
 			  <td><a class="btn btn-warning" href="/service/edit/{{this._id}}">EDIT</a></td>
 			  <td><button class="btn btn-danger" name="deleteButton" id={{this._id}}>DELETE</button></td>
 		  </tr>

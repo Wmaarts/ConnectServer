@@ -36,7 +36,7 @@ function matchUser(req, res){
     Service.findOne(query, function (err, service) {
         if(err) {return handleError(req, res, 500, err);}
         
-        if(service == undefined || service.usersVisited == undefined || 
+        if(service == null || service.usersVisited == undefined || 
         		service.usersVisited.length <= 1) //With only 1 user at the service it's hard to find a match. =)
         { 
         	console.log("No content. Usersvisited: ");
@@ -60,7 +60,7 @@ function matchUser(req, res){
         console.log(selectedMatch);
 
     	User.findById(secondQuery).then(data => {
-    		if(data == undefined){
+    		if(data == null){
     			return handleError(req, res, 500, "This user must exist");
     		}
     		console.log("Json return: ");

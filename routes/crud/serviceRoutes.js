@@ -15,12 +15,21 @@ module.exports = function(app, user, passport, url) {
 	// CREATE
     // Get
     app.get(url + '/create', user.can('access CRUD'), function(req, res) {
-        res.render('crud/services/create.html'); 
+		Geolocation.find({}).then(geolocations => {
+        	res.render('crud/services/create.html', {geolocationArray : geolocations});
+		});
     });
     
     // Post
     app.post(url + '/create', user.can('access CRUD'), function(req, res) {
-    	var service = new Service(req.body);
+		var body = {};
+		body.name = req.body.name;
+		body.description = req.body.description;
+		body.startDateTime = req.body.startDateTime + req.body.timezone;
+		body.endDateTime = req.body.endDateTime + req.body.timezone;
+		body.geolocation = req.body.geolocation;
+
+    	var service = new Service(body);
     	
     	service.save().then(savedService => {
     		res.redirect(url);
@@ -36,27 +45,29 @@ module.exports = function(app, user, passport, url) {
 		//req.swagger contains the path parameters
 		query._id = req.params.id;
 
-		var serviceResult = Service.findById(query).then(service => {
-			if(service == null){
-				res.render('crud/services/index.html', {err: "Service not found!"});
-			}
-			var data = {};
-			
-			data.name = service.name;
-	        data.startDateTime = service.startDateTime;
-	        data.endDateTime = service.endDateTime;
-	        data.description = service.description;
-	        data.geolocation = service.geolocation;
+		Geolocation.find({}).then(geolocations => {
+			Service.findById(query).then(service => {
+				if(service == null){
+					res.render('crud/services/index.html', {err: "Service not found!"});
+				}
+				var data = {};
+				
+				data.name = service.name;
+				data.startDateTime = service.startDateTime;
+				data.endDateTime = service.endDateTime;
+				data.description = service.description;
+				data.geolocation = service.geolocation;
 
-	        data.usersVisited = service.usersVisited;
-	        data.photos = service.photos;
-			
-			data.startDateTime = moment(data.startDateTime).format('YYYY-MM-DDThh:mm').toString();
-			data.endDateTime = moment(data.endDateTime).format('YYYY-MM-DDThh:mm').toString();
+				data.usersVisited = service.usersVisited;
+				data.photos = service.photos;
+				
+				data.startDateTime = moment(data.startDateTime).format('YYYY-MM-DDThh:mm').toString();
+				data.endDateTime = moment(data.endDateTime).format('YYYY-MM-DDThh:mm').toString();
 
-	    	res.render('crud/services/edit.html', { model: data }); 
-		})
-		.fail(err => res.render('crud/services/index.html', {err: err}));
+				res.render('crud/services/edit.html', { model: data, geolocationArray: geolocations }); 
+			})
+			.fail(err => res.render('crud/services/index.html', {err: err}));
+		});
     });
     
     // POST
@@ -70,8 +81,8 @@ module.exports = function(app, user, passport, url) {
             }
 
             service.name = req.body.name || service.name;
-            service.startDateTime = req.body.startDateTime || service.startDateTime;
-            service.endDateTime = req.body.endDateTime || service.endDateTime;
+            service.startDateTime = req.body.startDateTime + req.body.timezone || service.startDateTime;
+            service.endDateTime = req.body.endDateTime + req.body.timezone || service.endDateTime;
             service.description = req.body.description || service.description;
             service.geolocation = req.body.geolocation || service.geolocation;
             

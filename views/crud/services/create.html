@@ -4,10 +4,17 @@
 			<label>* = required</label>
 			<br/>
 			<label>Name* :</label>
-			<input type="text" name="name" id="name" placeholder="insert name here"/>
+				<input type="text" name="name" id="name" placeholder="insert name here"/>
 			<br/>
 			<label>Description* :</label>
-			<input type="text" name="description" id="description" placeholder="insert description here"/>
+				<input type="text" name="description" id="description" placeholder="insert description here"/>
+			<br/>
+			<label>Geolocations :</label>
+			<select name="geolocation">
+				{{#each geolocationArray}}
+					<option value="{{_id}}">{{name}}</option>
+				{{/each}}
+			</select>
 			<br/>
 			<label>Start date & time:</label>
 				<input type="datetime-local" class="datepicker" data-date-format="mm/dd/yyyy" name="startDateTime" id="startDateTime"></input>
@@ -15,7 +22,15 @@
 			<label>End date & time:</label>
 				<input type="datetime-local" class="datepicker" data-date-format="mm/dd/yyyy" name="endDateTime" id="endDateTime"></input>
 			<br/>
+			<label>Timezone</label>
+				<input type="text" id="timezone" name="timezone"</input>
+			<br/>
 			<input type="submit" value="Submit">
 		</form>
 	</div>
+<script src="/moment.js"></script>	
+<script>
+	var timezone = moment.parseZone(moment().format()).format('Z');
+	document.getElementById("timezone").value = timezone;
+</script>
 {{> 'crudFooter'}}

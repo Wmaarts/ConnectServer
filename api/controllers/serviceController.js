@@ -37,7 +37,40 @@ function getServiceCurrentlyRunning(req, res) {
             return handleError(req, res, 500, err);
         }
 
-        return res.json(service);
+        var serviceClone = {};
+
+        if(service == undefined) {
+            return res.status(204).send("No Content");
+        }
+
+        serviceClone._id = service._id;
+        serviceClone.name = service.name;
+        serviceClone.description = service.description;
+        serviceClone.startDateTime = service.startDateTime;
+        serviceClone.endDateTime = service.endDateTime;
+        serviceClone.usersVisited = service.usersVisited;
+        serviceClone.photos = service.photos;
+
+        if(service.geolocation) {
+            var geolocationQuery = {
+                _id : service.geolocation,
+            };
+
+            var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
+                if (err) {
+                    return handleError(req, res, 500, err); // error handling uhm
+                }
+
+                if(geolocation) {
+                    // Put the Geolocation inside service object
+                    serviceClone.geolocation = geolocation;
+                }
+                return res.json(serviceClone);
+            });
+        }
+        else {
+            return res.json(serviceClone);
+        }
     });
 }
 
@@ -49,7 +82,41 @@ function getServiceById(req, res) {
         if (err) {
             return handleError(req, res, 500, err);
         }
-        return res.json(service);
+
+        if(service == undefined) {
+            return res.status(204).send("No Content");
+        }
+
+        var serviceClone = {};
+
+        serviceClone._id = service._id;
+        serviceClone.name = service.name;
+        serviceClone.description = service.description;
+        serviceClone.startDateTime = service.startDateTime;
+        serviceClone.endDateTime = service.endDateTime;
+        serviceClone.usersVisited = service.usersVisited;
+        serviceClone.photos = service.photos;
+
+        if(service.geolocation) {
+            var geolocationQuery = {
+                _id : service.geolocation,
+            };
+
+            var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
+                if (err) {
+                    return handleError(req, res, 500, err); // error handling uhm
+                }
+
+                if(geolocation) {
+                    // Put the Geolocation inside service object
+                    serviceClone.geolocation = geolocation;
+                }
+                return res.json(serviceClone);
+            });
+        }
+        else {
+            return res.json(serviceClone);
+        }
     });
 }
 
@@ -87,6 +154,10 @@ function getServiceList(req, res) {
             return res.json(serviceListClone);
         };
 
+        if(serviceList == undefined || serviceList.length <= 0) {
+            return res.status(204).send("No Content");
+        }
+
         // Adding Geolocations to the Services
         serviceList.forEach(function(service, index, array) {
             var serviceClone = {};
@@ -99,24 +170,36 @@ function getServiceList(req, res) {
             serviceClone.usersVisited = service.usersVisited;
             serviceClone.photos = service.photos;
 
-            var geolocationQuery = {
-                _id : service.geolocation,
-            };
+            if(service.geolocation) {
+                var geolocationQuery = {
+                    _id : service.geolocation,
+                };
+                var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
+                    if (err) {
+                        return handleError(req, res, 500, err); // error handling uhm
+                    }
 
-            var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
-                if (err) {
-                    console.log(err);
-                }
+                    if(geolocation) { // Just in case, eh.
+                        // Put the Geolocation inside service object
+                        serviceClone.geolocation = geolocation;
+                    }
+                    serviceListClone.push(serviceClone);
 
-                // Put the Geolocation inside service object
-                serviceClone.geolocation = geolocation;
+                    // Send Json when the last geolocation callback has been made
+                    itemsProcessed++;
+                    if (itemsProcessed === array.length) {
+                        serviceJsonCallback();
+                    }
+                });
+            }
+            else {
                 serviceListClone.push(serviceClone);
-
                 itemsProcessed++;
                 if (itemsProcessed === array.length) {
                     serviceJsonCallback();
                 }
-            });
+            }
+
         });
     });
 }

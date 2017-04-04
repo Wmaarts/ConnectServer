@@ -39,6 +39,10 @@ function getServiceCurrentlyRunning(req, res) {
 
         var serviceClone = {};
 
+        if(service == undefined) {
+            return res.status(204).send("No Content");
+        }
+
         serviceClone._id = service._id;
         serviceClone.name = service.name;
         serviceClone.description = service.description;
@@ -70,6 +74,10 @@ function getServiceById(req, res) {
 	var serviceResult = Service.findById(query, function (err, service) {
         if (err) {
             return handleError(req, res, 500, err);
+        }
+
+        if(service == undefined) {
+            return res.status(204).send("No Content");
         }
 
         var serviceClone = {};
@@ -131,6 +139,10 @@ function getServiceList(req, res) {
         function serviceJsonCallback() {
             return res.json(serviceListClone);
         };
+
+        if(serviceList == undefined || serviceList.length <= 0) {
+            return res.status(204).send("No Content");
+        }
 
         // Adding Geolocations to the Services
         serviceList.forEach(function(service, index, array) {

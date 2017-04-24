@@ -15,11 +15,13 @@ Wouter:
  - Lijst van personen die er zijn -> live updaten in de browser
 / Mocha testing
 + Run on server
++ CRUD view
 
 TODO:
-/ CRUD view
-- Demonstratie voorbereiden
 / Error handling API
+- Google Maps API in geolocation
+- Websocket voor live update wie er allemaal zijn
+- Populate gebruiken 
 
 Extra:
 - Externe API's implementeren (Facebook)

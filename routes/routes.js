@@ -3,10 +3,17 @@ var roles = new ConnectRoles();
 
 module.exports = function(app, user, passport) {
 
+	// TODO: Lelijk. Fix.
 	require('./crud/userRoutes')(app, user, passport, '/user');
 	require('./crud/serviceRoutes')(app, user, passport, '/service');
 	require('./crud/photoRoutes')(app, user, passport, '/photo');
 	require('./crud/geolocationRoutes')(app, user, passport, '/geolocation');
+	
+	app.get('/test', function(req, res) {
+		res.render('test.html');
+	});
+	
+	// AIzaSyB_k41shvfYEyyDLNGQdHj9FnxUJAOQaFA
 	
 	// Swagger documentation page
 	app.get('/api-docs', function(req, res) {

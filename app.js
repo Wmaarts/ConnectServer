@@ -128,7 +128,7 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
 
   var io = require('socket.io').listen(server);
   
-  //Socket!
+  // Socket!
   io.on('connection', function(socket){
   	console.log('a user connected');
   	socket.on('disconnect', function(){

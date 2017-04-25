@@ -17,10 +17,10 @@ Wouter:
 + Run on server
 + CRUD view
 + Google Maps API in geolocation
++ Websocket voor live update wie er allemaal zijn
 
 TODO:
 / Error handling API
-- Websocket voor live update wie er allemaal zijn
 - Populate gebruiken 
 
 Extra:

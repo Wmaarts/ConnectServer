@@ -127,9 +127,7 @@ function getServiceList(req, res) {
     var query = {};
 
     if (req.swagger.params.gtDate.value != undefined) { 
-        // if (query.startDateTime == undefined) {
-            query.startDateTime = {};
-        // }
+        query.startDateTime = {};
         query.startDateTime.$gt = gtDate; 
     }
 
@@ -145,7 +143,6 @@ function getServiceList(req, res) {
         if (err) { //err handling
             return handleError(req, res, 500, err);
         }
-
         var serviceListClone = [];
 
         var itemsProcessed = 0;

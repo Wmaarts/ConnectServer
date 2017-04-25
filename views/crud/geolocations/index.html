@@ -1,5 +1,5 @@
 {{> 'crudHeader'}}
-	
+
 <table class="table">
    	<thead>
         <tr>
@@ -8,7 +8,7 @@
         </tr>
 	</thead>
 	<tbody>
-		{{#each photos}}
+		{{#each locations}}
 		  <tr>
 			  <td>{{this.name}}</td>
 			  <td><a class="btn btn-warning" href="/geolocation/edit/{{this._id}}">EDIT</a></td>
@@ -21,7 +21,7 @@
   <div class="starter-template">
     <a class="btn btn-success" href="/geolocation/create">New geolocation</a>
   </div>
-</div><!-- /.container -->
+</div>
 
 <script>
 var elements = document.querySelectorAll('[name="deleteButton"]');

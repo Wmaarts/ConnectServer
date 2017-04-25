@@ -117,6 +117,7 @@ var config = {
   appRoot: __dirname // required config
 };
 
+
 SwaggerExpress.create(config, function(err, swaggerExpress) {
   if (err) { throw err; }
 
@@ -126,20 +127,8 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   var port = process.env.PORT || 10010;
   var server = app.listen(port);
 
-  var io = require('socket.io').listen(server);
-  
-  // Socket!
-  io.on('connection', function(socket){
-  	console.log('a user connected');
-  	socket.on('disconnect', function(){
-  	    console.log('user disconnected');
-  	});
-  	var counter = 0;
-  	setInterval(function(){
-  		counter++;
-  		socket.emit('number', counter);
-  	}, 1000);
-  });
+  var io = require('./routes/sockets').listen(server);
+
 });
 
 module.exports = app; // for testing

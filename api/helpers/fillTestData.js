@@ -85,6 +85,9 @@ function fillServices(overwrite) {
 			"startDateTime" : thisMoment,
 			"endDateTime" : tomorrowsMoment,
 			"geolocation" : "58de221418c06e4cccd7f3e0",
+			"usersVisited": [
+				"58da5d2878f01000f84b93ec"
+				]
 		},
 	];
 

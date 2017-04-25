@@ -58,7 +58,7 @@ function getServiceCurrentlyRunning(req, res) {
 
             var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
                 if (err) {
-                    return handleError(req, res, 500, err); // error handling uhm
+                    return handleError(req, res, 500, err); // error handling
                 }
 
                 if(geolocation) {

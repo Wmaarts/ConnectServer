@@ -9,9 +9,6 @@ module.exports = function(app, user, passport) {
 	require('./crud/photoRoutes')(app, user, passport, '/photo');
 	require('./crud/geolocationRoutes')(app, user, passport, '/geolocation');
 	
-	app.get('/test', function(req, res) {
-		res.render('test.html');
-	});
 	
 	// AIzaSyB_k41shvfYEyyDLNGQdHj9FnxUJAOQaFA
 	

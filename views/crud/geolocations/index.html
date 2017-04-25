@@ -4,8 +4,6 @@
    	<thead>
         <tr>
             <th data-field="name">Name</th>
-            <th data-field="latitude">Latitude:</th>
-            <th data-field="longtitude">Longitude:</th>
             <th/>
         </tr>
 	</thead>
@@ -13,8 +11,6 @@
 		{{#each photos}}
 		  <tr>
 			  <td>{{this.name}}</td>
-			  <td>{{this.latitude}}</td>
-			  <td>{{this.longitude}}</td>
 			  <td><a class="btn btn-warning" href="/geolocation/edit/{{this._id}}">EDIT</a></td>
 			  <td><button class="btn btn-danger" name="deleteButton" id={{this._id}}>DELETE</button></td>
 		  </tr>

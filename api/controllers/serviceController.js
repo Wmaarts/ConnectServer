@@ -124,81 +124,30 @@ function getServiceList(req, res) {
         query.startDateTime.$lt = ltDate; 
     }
 
-    if (req.swagger.params.limit.value != undefined) { //TODO remove undefined
-        // query.limit(req.swagger.params.limit.value);
-        console.log("get inside limit?");
-    }
-
-    if (req.swagger.params.offset.value != undefined) { //TODO remove undefined
-        // query.offset = req.swagger.params.offset.value;
-        console.log("get inside offset?");
-    }
-
     // Actual search using built query
-    var result = Service.find(query, function(err, serviceList) {
+    var query = Service
+    .find(query)
+    
+    .limit(req.swagger.params.limit.value)
+    .skip(req.swagger.params.offset.value)
+    .sort({startDateTime: -1});
+
+    console.log(query);
+
+    var result = query
+    .populate('geolocation')    
+    .exec(function(err, serviceList) {
         if (err) { //err handling
             return handleError(req, res, 500, err);
         }
-        var serviceListClone = [];
-
-        var itemsProcessed = 0;
-
-        function serviceJsonCallback() {
-            return res.json(serviceListClone);
-        };
-
-        console.log(serviceList);
-
         if(serviceList == undefined || serviceList.length <= 0) {
             return res.status(204).send("No Content");
         }
-
-        // Adding Geolocations to the Services
-        serviceList.forEach(function(service, index, array) {
-            var serviceClone = {};
-
-            serviceClone._id = service._id;
-            serviceClone.name = service.name;
-            serviceClone.description = service.description;
-            serviceClone.startDateTime = service.startDateTime;
-            serviceClone.endDateTime = service.endDateTime;
-            serviceClone.usersVisited = service.usersVisited;
-            serviceClone.photos = service.photos;
-
-            if(service.geolocation) {
-                var geolocationQuery = {
-                    _id : service.geolocation,
-                };
-                var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
-                    if (err) {
-                        return handleError(req, res, 500, err); // error handling uhm
-                    }
-
-                    if(geolocation) { // Just in case, eh.
-                        // Put the Geolocation inside service object
-                        serviceClone.geolocation = geolocation;
-                    }
-                    serviceListClone.push(serviceClone);
-
-                    // Send Json when the last geolocation callback has been made
-                    itemsProcessed++;
-                    if (itemsProcessed === array.length) {
-                        serviceJsonCallback();
-                    }
-                });
-            }
-            else {
-                serviceListClone.push(serviceClone);
-                itemsProcessed++;
-                if (itemsProcessed === array.length) {
-                    serviceJsonCallback();
-                }
-            }
-
-        });
     })
-    .limit(req.swagger.params.limit.value)
-    .skip(req.swagger.params.offset.value);
+    .then(data => {
+        return res.json(data);
+    })
+    .fail(err => {return handleError(req, res, 500, err)});
 }
 
 function addUserVisitedById(req, res) {

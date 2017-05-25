@@ -1,4 +1,4 @@
-var q = require('q');
+var Q = require('q');
 
 var mongoose = require('mongoose');
 User = mongoose.model('User');
@@ -9,147 +9,158 @@ var moment = require('moment-timezone');
 
 
 function fillUsers(overwrite){
-	var testData = [
-		{
-		    "_id" : '58d52617e1b7270dc4714358',
-		    "local" : {
-		        "password" : "$2a$08$gRWR3zlvyKUHHkNbM9wFf.uTuIorr/FBOFiHcatQ7V8fk6GseNXW6",
-		        "email" : "admin"
-		    },
-		    "telephoneNumber": 0681000001,
-		    "role" : "admin",
-		    "__v" : 0
-		},
-		{ // just a normal user for testing purposes (Photos)
-		    "_id" : '58da5d2878f01000f84b93ec', 
-			"name": "test",
-			"telephoneNumber": 0681000000,
-		    "role" : "user",
-		    "__v" : 0
-		},
-		{
-		    "_id" : "58e360036c78a407805c896d",
-		    "local" : {
-		        "password" : "$2a$08$Ewt9Ky7nT5mXsHf4TJop8.ss3Hj12SEgFrMLEQ5rPmj4T6ZeOP0IO",
-		        "email" : "mod"
-		    },
-		    "role" : "moderator",
-		    "__v" : 0
-		}
-	];
+	return new Q.Promise(function(resolve, reject) {
+		var testData = [
+			{
+				"_id" : '58d52617e1b7270dc4714358',
+				"local" : {
+					"password" : "$2a$08$gRWR3zlvyKUHHkNbM9wFf.uTuIorr/FBOFiHcatQ7V8fk6GseNXW6",
+					"email" : "admin"
+				},
+				"telephoneNumber": 0681000001,
+				"role" : "admin",
+				"__v" : 0
+			},
+			{ // just a normal user for testing purposes (Photos)
+				"_id" : '58da5d2878f01000f84b93ec', 
+				"name": "test",
+				"telephoneNumber": 0681000000,
+				"role" : "user",
+				"__v" : 0
+			},
+			{
+				"_id" : "58e360036c78a407805c896d",
+				"local" : {
+					"password" : "$2a$08$Ewt9Ky7nT5mXsHf4TJop8.ss3Hj12SEgFrMLEQ5rPmj4T6ZeOP0IO",
+					"email" : "mod"
+				},
+				"role" : "moderator",
+				"__v" : 0
+			}
+		];
 
-	User.find({})
-		.then(data => {
-			if(overwrite || data.length <= 1){
-				console.log('Clearing users and creating new testdata');
-				User.remove({}, function(){
+		User.find({})
+			.then(data => {
+				if(overwrite || data.length <= 1){
+					console.log('Clearing users and creating new testdata');
+					User.remove({}, function(){
+						// First remove all previous users, then create the new ones
+						
+						testData.forEach(function(user){
+							var model = new User(user);
+							
+							// Error handling
+							model.save(function(err){
+								if(err) {
+									console.error(err);
+									reject(err);
+								}
+							});
+						})
+					});
+				} else{
+					console.log('Skipping create users testdata, already present');
+				}
+				resolve(true);
+			});
+
+	})
+};
+
+function fillServices(overwrite) {
+	return new Q.Promise(function(resolve, reject) {
+		var thisMoment = new moment();
+		var tomorrowsMoment = new moment().add(1, 'days');
+
+		var testData = [
+			{
+				"_id" : "58de464012fdf76df0e221a6",
+				"name" : "History-Service",
+				"description" : "Desc",
+				"startDateTime" : "2016-04-16T16:06:05Z",
+				"endDateTime" : "2016-04-16T18:06:05Z",
+				"geolocation" : "58de221418c06e4cccd7f3df",
+				
+			},
+			{
+				"_id" : "58de464012fdf76df0e221a7",
+				"name" : "Current-TestService",
+				"description" : "Yes.",
+				"startDateTime" : thisMoment,
+				"endDateTime" : tomorrowsMoment,
+				"geolocation" : "58de221418c06e4cccd7f3e0",
+			},
+		];
+
+		Service.find({}, function(err, services) {
+			if (overwrite || services.length <= 1) {
+				console.log('Clearing services and creating new testdata');
+				Service.remove({}, function(){
 					// First remove all previous users, then create the new ones
 					
-					testData.forEach(function(user){
-						var model = new User(user);
+					testData.forEach(function(newService){
+						var model = new Service(newService);
 						
 						// Error handling
-						model.save(function(err){
+						model.save(function(err) {
 							if(err) {
-								console.error(err);
+								console.error(err); // oh no.
+								reject(err);
 							}
 						});
 					})
 				});
-			} else{
-				console.log('Skipping create users testdata, already present');
+			} 
+			else {
+				console.log('Skipping create services testdata, already present');
 			}
-			return;
+			resolve(true);
 		});
-};
-
-function fillServices(overwrite) {
-	
-	var thisMoment = new moment();
-	var tomorrowsMoment = new moment().add(1, 'days');
-
-	var testData = [
-		{
-			"_id" : "58de464012fdf76df0e221a6",
-			"name" : "History-Service",
-			"description" : "Desc",
-			"startDateTime" : "2016-04-16T16:06:05Z",
-			"endDateTime" : "2016-04-16T18:06:05Z",
-			"geolocation" : "58de221418c06e4cccd7f3df",
-			
-		},
-		{
-			"_id" : "58de464012fdf76df0e221a7",
-			"name" : "Current-TestService",
-			"description" : "Yes.",
-			"startDateTime" : thisMoment,
-			"endDateTime" : tomorrowsMoment,
-			"geolocation" : "58de221418c06e4cccd7f3e0",
-		},
-	];
-
-	Service.find({}, function(err, services) {
-		if (overwrite || services.length <= 1) {
-			console.log('Clearing services and creating new testdata');
-			Service.remove({}, function(){
-				// First remove all previous users, then create the new ones
-				
-				testData.forEach(function(newService){
-					var model = new Service(newService);
-					
-					// Error handling
-					model.save(function(err) {
-						if(err) {
-							console.error(err); // oh no.
-						}
-					});
-				})
-			});
-		} 
-		else {
-			console.log('Skipping create services testdata, already present');
-		}
-	});
+	})
 }
 
 function fillGeolocations(overwrite) {
-	var testData = [
-		{
-			"_id" : "58de221418c06e4cccd7f3df",
-			"name" : "Connect Revius Wijk Lyceum",
-			"latitude" : 51.982319,
-			"longitude" : 5.338590,
-		},
-		{
-			"_id" : "58de221418c06e4cccd7f3e0",
-			"name" : "Avans Hogeschool 's-Hertogenbosch",
-			"latitude": 51.688705,
-			"longitude" : 5.287003,
-		},
-	];
+	return new Q.Promise(function(resolve, reject) {
+		var testData = [
+			{
+				"_id" : "58de221418c06e4cccd7f3df",
+				"name" : "Connect Revius Wijk Lyceum",
+				"latitude" : 51.982319,
+				"longitude" : 5.338590,
+			},
+			{
+				"_id" : "58de221418c06e4cccd7f3e0",
+				"name" : "Avans Hogeschool 's-Hertogenbosch",
+				"latitude": 51.688705,
+				"longitude" : 5.287003,
+			},
+		];
 
-	Geolocation.find({}, function(err, geolocations) {
-		if (overwrite || geolocations.length <= 1) {
-			console.log('Clearing geolocations and creating new testdata');
-			Geolocation.remove({}, function(){
-				// First remove all previous users, then create the new ones
-				
-				testData.forEach(function(newGeo){
-					var model = new Geolocation(newGeo);
+		Geolocation.find({}, function(err, geolocations) {
+			if (overwrite || geolocations.length <= 1) {
+				console.log('Clearing geolocations and creating new testdata');
+				Geolocation.remove({}, function(){
+					// First remove all previous users, then create the new ones
 					
-					// Error handling
-					model.save(function(err){
-						if(err) {
-							console.error(err); // oh no.
-						}
-					});
-				})
-			});
-		} 
-		else {
-			console.log('Skipping create geolocations testdata, already present');
-		}
-	});
+					testData.forEach(function(newGeo){
+						var model = new Geolocation(newGeo);
+						
+						// Error handling
+						model.save(function(err){
+							if(err) {
+								console.error(err); // oh no.
+								reject(err)
+							}
+						});
+					})
+				});
+			} 
+			else {
+				console.log('Skipping create geolocations testdata, already present');
+			}
+			resolve(true);
+		});
+	})
 }
 
 function fillPhotos(overwrite){
@@ -186,10 +197,31 @@ function fillPhotos(overwrite){
 		});
 };
 
-module.exports = function(overwrite) {
-	q.fcall(fillUsers(overwrite))
-		.then(fillGeolocations(overwrite))
-		.then(fillServices(overwrite))
-		.then(fillPhotos(overwrite))
-		; // end fcall
+module.exports = {
+	fillUsersPromise: function(overwrite) {
+		console.log("users promise")
+		return fillUsers(overwrite);
+	},
+	fillGeolocationsPromise: function(overwrite) {
+		console.log("geo promise")
+		return fillGeolocations(overwrite)
+	},
+	fillPhotosPromise: function(overwrite) {
+		console.log("photos promise")
+		return fillPhotos(overwrite)
+	},
+	fillServicesPromise: function(overwrite) {
+		console.log("services promise")
+		return fillServices(overwrite)
+	},
+	fillTestData: function(overwrite) {
+		Q.fcall(fillUsers(overwrite))
+			.then(fillGeolocations(overwrite))
+			.then(fillServices(overwrite))
+			.then(fillPhotos(overwrite))
+			; // end fcall
+	}
+
+
+
 }

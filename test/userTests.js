@@ -3,15 +3,22 @@ var expect = require('chai').expect;
 var should = require('chai').should();
 var app = require('express')();
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/connect-cms');
-mongoose.Promise = require('q').Promise;
+// mongoose.connect('mongodb://localhost:27017/connect-cms');
+// mongoose.Promise = require('q').Promise;
 
-require('../api/models/photo');
-require('../api/models/user');
-require('../api/models/service');
-require('../api/models/geolocation');
-require('../api/helpers/fillTestData')(true);
+// require('../api/models/photo');
+// require('../api/models/user');
+// require('../api/models/service');
+// require('../api/models/geolocation');
+
+
+User = mongoose.model('User');
+Geolocation = mongoose.model('Geolocation');
+Service = mongoose.model('Service');
+Photo = mongoose.model('Photo');
 	
+
+
 var userController = require('../api/controllers/userController');
 
 var SwaggerExpress = require('swagger-express-mw');
@@ -38,14 +45,19 @@ function makeRequest(route, statusCode, done){
 		});
 }
 
-describe('Empty test: ', function(){
-	it('should always pass', function(done){
-		makeRequest('/users', 200, function(err, res){
-			if(err){ return done(err); }
-			done();
-		});
-	})
-});
+
+	
+
+// describe('Empty test / Fill Testdata: ', function(){
+// 	it('should always pass', function(done){
+// 		makeRequest('/users', 200, function(err, res){
+// 			if(err){ return done(err); }
+// 			done();
+// 		});
+// 	})
+// })
+		
+
 
 describe('Testing user GET routes', function(){
 	describe('without params', function(){
@@ -60,6 +72,7 @@ describe('Testing user GET routes', function(){
 			});
 		});
 	});
+
 
 	describe('with id', function(){
 		it('should return a specific user', function(done){
@@ -81,15 +94,15 @@ describe('Testing user POST route', function(){
 	describe(': creating a new one', function(){
 		it('should return the new one', function(done){
 			request(app)
-		      .post('/users')
-		      .send({"name" : "TestUser"})
-		      .expect(201)
-		      .end(function(err, res) {
-		        if (err) done(err);
-		        res.body.should.have.property('_id');
-		        res.body.should.be.have.property('name', 'TestUser');
-		        done();
-		      });
+			.post('/users')
+			.send({"name" : "TestUser"})
+			.expect(201)
+			.end(function(err, res) {
+				if (err) done(err);
+				res.body.should.have.property('_id');
+				res.body.should.be.have.property('name', 'TestUser');
+				done();
+			});
 		});
 	});
 });

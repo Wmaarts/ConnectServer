@@ -140,6 +140,16 @@ function getServiceList(req, res) {
         query.startDateTime.$lt = ltDate; 
     }
 
+    if (req.swagger.params.limit.value != undefined) { //TODO remove undefined
+        // query.limit(req.swagger.params.limit.value);
+        console.log("get inside limit?");
+    }
+
+    if (req.swagger.params.offset.value != undefined) { //TODO remove undefined
+        // query.offset = req.swagger.params.offset.value;
+        console.log("get inside offset?");
+    }
+
     // Actual search using built query
     var result = Service.find(query, function(err, serviceList) {
         if (err) { //err handling
@@ -153,6 +163,8 @@ function getServiceList(req, res) {
         function serviceJsonCallback() {
             return res.json(serviceListClone);
         };
+
+        console.log(serviceList);
 
         if(serviceList == undefined || serviceList.length <= 0) {
             return res.status(204).send("No Content");
@@ -201,7 +213,9 @@ function getServiceList(req, res) {
             }
 
         });
-    });
+    })
+    .limit(req.swagger.params.limit.value)
+    .skip(req.swagger.params.offset.value);
 }
 
 function addUserVisitedById(req, res) {

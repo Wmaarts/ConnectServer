@@ -40,11 +40,18 @@ require('./api/models/photo');
 require('./api/models/service');
 require('./api/models/geolocation');
 
+// var Q = require('q');
+
+// var geolocationsPromise = require('../api/helpers/fillTestData').fillGeolocationsPromise(true);
+// var photosPromise = require('../api/helpers/fillTestData').fillPhotosPromise(true);
+// var servicesPromise = require('../api/helpers/fillTestData').fillServicesPromise(true);
+// var usersPromise = require('../api/helpers/fillTestData').fillUsersPromise(true);
+
 // Fill Testdata
 if (process.env.NODE_ENV == "production") {
-	require('./api/helpers/fillTestData')(false);
+	require('./api/helpers/fillTestData').fillTestData(false);
 } else{
-	require('./api/helpers/fillTestData')(true);
+	require('./api/helpers/fillTestData').fillTestData(true);
 }
 
 // Routes

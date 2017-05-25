@@ -2,14 +2,6 @@ var ConnectRoles = require('connect-roles');
 var roles = new ConnectRoles();
 
 module.exports = function(app, user, passport) {
-
-	// TODO: Lelijk. Fix.
-	require('./crud/userRoutes')(app, user, passport, '/user');
-	require('./crud/serviceRoutes')(app, user, passport, '/service');
-	require('./crud/photoRoutes')(app, user, passport, '/photo');
-	require('./crud/geolocationRoutes')(app, user, passport, '/geolocation');
-	
-	
 	// AIzaSyB_k41shvfYEyyDLNGQdHj9FnxUJAOQaFA
 	
 	// Swagger documentation page
@@ -147,6 +139,11 @@ module.exports = function(app, user, passport) {
         req.logout();
         res.redirect('/');
     });
+    
+	require('./crud/userRoutes')(app, user, passport, '/user');
+	require('./crud/serviceRoutes')(app, user, passport, '/service');
+	require('./crud/photoRoutes')(app, user, passport, '/photo');
+	require('./crud/geolocationRoutes')(app, user, passport, '/geolocation');
 };
 
 // route middleware to make sure a user is logged in

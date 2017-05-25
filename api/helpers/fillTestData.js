@@ -18,6 +18,7 @@ function fillUsers(overwrite){
 					"email" : "admin"
 				},
 				"telephoneNumber": 0681000001,
+				"name": "admin!",
 				"role" : "admin",
 				"__v" : 0
 			},
@@ -117,7 +118,7 @@ function fillServices(overwrite) {
 			resolve(true);
 		});
 	})
-}
+};
 
 function fillGeolocations(overwrite) {
 	return new Q.Promise(function(resolve, reject) {

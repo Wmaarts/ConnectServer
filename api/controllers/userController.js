@@ -47,16 +47,12 @@ function matchUser(req, res){
         var rand = Math.floor((Math.random() * service.usersVisited.length) + 0);
         var selectedMatch = service.usersVisited[rand]
         while(selectedMatch == req.swagger.params.id.value){
-        	console.log(" selectedMatch = " + selectedMatch);
         	selectedMatch = service.usersVisited[Math.floor((Math.random() * service.usersVisited.length) + 0)]
         }
         
         var secondQuery = {};
         secondQuery._id = selectedMatch
     	
-        console.log("Selected match: "  + selectedMatch);
-        console.log(selectedMatch);
-
     	User.findById(secondQuery).then(data => {
     		if(data == null){
     			return handleError(req, res, 500, "This user must exist");

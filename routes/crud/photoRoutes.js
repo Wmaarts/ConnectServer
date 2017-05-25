@@ -5,7 +5,11 @@ module.exports = function(app, user, passport, url) {
 
 	// INDEX 
     app.get(url, user.can('access CRUD'), function(req, res) {
-    	var result = Photo.find({}).then(data => {
+    	Photo
+    	.find({})
+    	.populate('firstUserId')
+    	.populate('secondUserId')
+    	.then(data => {
     		res.render('crud/photos/index.html', {photos: data}); 
     	})
     	.fail(err => res.render('crud/photos/index.html', {err: err}));

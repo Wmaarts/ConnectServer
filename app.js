@@ -6,7 +6,6 @@ var http = require('http').Server(app);
 var hbs = require('hbs');
 var fs = require('fs');
 
-var SwaggerExpress = require('swagger-express-mw');
 var passport = require('passport');
 var ConnectRoles = require('connect-roles');
 var flash    = require('connect-flash');
@@ -28,13 +27,8 @@ else {
 	mongoose.connect('mongodb://localhost:27017/connect-cms'); // Local database
 }
 mongoose.Promise = require('q').Promise;
-// /Data Access Layer
 
-// Register Handlebars partials
-//hbs.registerPartial('partial', fs.readFileSync(__dirname + '/views/partial.hbs', 'utf8'));
-hbs.registerPartials(__dirname + '/views/partials');
-
-// Load the models
+//Load the models
 require('./api/models/user');
 require('./api/models/photo');
 require('./api/models/service');
@@ -46,6 +40,12 @@ require('./api/models/geolocation');
 // var photosPromise = require('../api/helpers/fillTestData').fillPhotosPromise(true);
 // var servicesPromise = require('../api/helpers/fillTestData').fillServicesPromise(true);
 // var usersPromise = require('../api/helpers/fillTestData').fillUsersPromise(true);
+// /Data Access Layer
+var SwaggerExpress = require('swagger-express-mw');
+
+// Register Handlebars partials
+//hbs.registerPartial('partial', fs.readFileSync(__dirname + '/views/partial.hbs', 'utf8'));
+hbs.registerPartials(__dirname + '/views/partials');
 
 // Fill Testdata
 if (process.env.NODE_ENV == "production") {
@@ -124,6 +124,7 @@ var config = {
   appRoot: __dirname // required config
 };
 
+
 SwaggerExpress.create(config, function(err, swaggerExpress) {
   if (err) { throw err; }
 
@@ -133,20 +134,8 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   var port = process.env.PORT || 10010;
   var server = app.listen(port);
 
-  var io = require('socket.io').listen(server);
-  
-  // Socket!
-  io.on('connection', function(socket){
-  	console.log('a user connected');
-  	socket.on('disconnect', function(){
-  	    console.log('user disconnected');
-  	});
-  	var counter = 0;
-  	setInterval(function(){
-  		counter++;
-  		socket.emit('number', counter);
-  	}, 1000);
-  });
+  var io = require('./routes/sockets').listen(server);
+
 });
 
 module.exports = app; // for testing

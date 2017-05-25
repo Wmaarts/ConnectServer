@@ -6,13 +6,77 @@
 			<label>Name* :</label>
 			<input type="text" name="name" id="name" value="{{model.name}}"/>
 			<br/>
+			
+			<label>Select the location: </label>
+			<div id="locationField">
+		    <input id="autocomplete" placeholder="Enter your address"
+		             onFocus="geolocate()" type="text"></input>
+		    </div>
+		    
+		    <iframe id="frame" src="https://maps.google.com/maps?q=51.9756003,5.338449500000024&z=14&output=embed"></iframe>
+			<br>
+			<br>
+			
 			<label>Longitude* :</label>
-			<input type="text" name="longitude" id="longitude"" placeholder="i.e. 5.33859"></input>
+			<input readonly type="text" name="longitude" id="longitude"" placeholder="..."></input>
 			<br/>
 			<label>Latitude* :</label>
-			<input type="text" name="latitude" id="latitude" placeholder="i.e. 5.33879"></input>
+			<input readonly type="text" name="latitude" id="latitude" placeholder="..."></input>
 			<br/>
 			<input type="submit" value="Submit">
 		</form>
 	</div>
+	
+    <script>
+      var placeSearch, autocomplete;
+
+      function initAutocomplete() {
+        // Create the autocomplete object, restricting the search to geographical
+        // location types.
+        autocomplete = new google.maps.places.Autocomplete(
+            /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+            {types: ['geocode']});
+
+        // When the user selects an address from the dropdown, populate the address
+        // fields in the form.
+        autocomplete.addListener('place_changed', fillInAddress);
+      }
+
+      function fillInAddress() {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+        
+        var mapsString = "https://maps.google.com/maps?q="
+        mapsString += place.geometry.location.lat();
+        mapsString += ","
+        mapsString += place.geometry.location.lng();
+        mapsString += "&z=15&output=embed";
+        
+		document.getElementById("frame").src = mapsString;
+        document.getElementById("latitude").value = place.geometry.location.lat();
+        document.getElementById("longitude").value = place.geometry.location.lng();
+      }
+
+      // Bias the autocomplete object to the user's geographical location,
+      // as supplied by the browser's 'navigator.geolocation' object.
+      function geolocate() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var geolocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            var circle = new google.maps.Circle({
+              center: geolocation,
+              radius: position.coords.accuracy
+            });
+            autocomplete.setBounds(circle.getBounds());
+          });
+        }
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_k41shvfYEyyDLNGQdHj9FnxUJAOQaFA&libraries=places&callback=initAutocomplete"
+        async defer></script>
+	
+	
 {{> 'crudFooter'}}

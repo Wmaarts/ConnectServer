@@ -7,7 +7,7 @@ var serviceSchema = new mongoose.Schema({
 	description: {type: String, required: true},
 	startDateTime: {type: Date, required: true},
 	endDateTime: {type: Date, required: true},
-	geolocation: { type: mongoose.Schema.Types.ObjectId, ref: 'GeoLocation'},
+	geolocation: { type: mongoose.Schema.Types.ObjectId, ref: 'Geolocation'},
 	usersVisited: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
 	photos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Photo'}]
 });

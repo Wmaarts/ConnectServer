@@ -1,4 +1,33 @@
 {{> 'crudHeader'}}
+
+<script src="/socket.io.js"></script>
+<script>
+    var socket = io.connect('https://connect-ku.herokuapp.com');
+	socket.emit('refresh');
+	setInterval(function(){
+		socket.emit('refresh');
+	}, 3000);
+	socket.on('activeService', function(msg){
+	    $('#activeService').html("Active service: " + msg.service);
+	    $('#nrOfGuests').html("Guests: " + msg.guests.length);
+	    
+	    var guests = ''
+	    for (var i = 0; i < msg.guests.length; i++) {
+		    var guest = msg.guests[i];
+		    guests += guest.name + ' ; ';
+		}
+		$('#guests').html(guests);
+	    $('#guests').removeAttr('hidden');
+	});
+	socket.on('noService', function(){
+		$('#guests').hide();
+		$('#activeService').html("No service active!");
+	})
+</script>
+
+<b id="activeService"></b>
+<p id="nrOfGuests"></p>
+<ul hidden id="guests"></ul>
 	
 <table class="table">
    	<thead>

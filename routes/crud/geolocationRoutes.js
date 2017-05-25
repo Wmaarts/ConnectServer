@@ -6,7 +6,7 @@ module.exports = function(app, user, passport, url) {
 	// INDEX 
     app.get(url, user.can('access CRUD'), function(req, res) {
     	var result = Geolocation.find({}).then(data => {
-    		res.render('crud/geolocations/index.html', {photos: data}); 
+    		res.render('crud/geolocations/index.html', {locations: data}); 
     	})
     	.fail(err => res.render('crud/geolocations/index.html', {err: err}));
     });
@@ -15,6 +15,17 @@ module.exports = function(app, user, passport, url) {
     // Get
     app.get(url + '/create', user.can('access CRUD'), function(req, res) {
         res.render('crud/geolocations/create.html'); 
+        
+        var io = require('socket.io').listen(server);
+        
+        // Socket!
+        io.on('connection', function(socket){
+        	var counter = 0;
+        	setInterval(function(){
+        		counter++;
+        		socket.emit('number', counter);
+        	}, 200);
+        });
     });
     
     // Post

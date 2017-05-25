@@ -32,7 +32,8 @@ function getServiceCurrentlyRunning(req, res) {
             },
     ]};
 
-    Service.findOne(query, function (err, service) {
+    Service
+    	.findOne(query, function (err, service) {
         if(err) {
             return handleError(req, res, 500, err);
         }
@@ -50,28 +51,13 @@ function getServiceCurrentlyRunning(req, res) {
         serviceClone.endDateTime = service.endDateTime;
         serviceClone.usersVisited = service.usersVisited;
         serviceClone.photos = service.photos;
-
-        if(service.geolocation) {
-            var geolocationQuery = {
-                _id : service.geolocation,
-            };
-
-            var geo = Geolocation.findById(geolocationQuery, function(err, geolocation) {
-                if (err) {
-                    return handleError(req, res, 500, err); // error handling uhm
-                }
-
-                if(geolocation) {
-                    // Put the Geolocation inside service object
-                    serviceClone.geolocation = geolocation;
-                }
-                return res.json(serviceClone);
-            });
-        }
-        else {
-            return res.json(serviceClone);
-        }
-    });
+    })
+    .populate('geolocation')	
+    .then(data => {
+    	console.log(data);
+        return res.json(data);
+    })
+	.fail(err => {return handleError(req, res, 500, err)});
 }
 
 function getServiceById(req, res) {
@@ -127,9 +113,7 @@ function getServiceList(req, res) {
     var query = {};
 
     if (req.swagger.params.gtDate.value != undefined) { 
-        // if (query.startDateTime == undefined) {
-            query.startDateTime = {};
-        // }
+        query.startDateTime = {};
         query.startDateTime.$gt = gtDate; 
     }
 
@@ -155,7 +139,6 @@ function getServiceList(req, res) {
         if (err) { //err handling
             return handleError(req, res, 500, err);
         }
-
         var serviceListClone = [];
 
         var itemsProcessed = 0;
